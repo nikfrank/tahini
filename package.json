@@ -1,0 +1,99 @@
+{
+  "name": "tahini",
+  "version": "1.0.0",
+  "description": "flexible vocabulary scoping for react",
+  "scripts": {
+    "build": "babel -d dist/ src/",
+    "version": "npm run build && npm publish #also bump version",
+    "test:integrations": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
+    "test:i": "npm run test:integrations",
+    "test:integrations:watch": "npm run test:integrations -- --watch --watch-extensions js",
+    "test:i:w": "npm run test:integrations:watch",
+    "test:integrations:cover": "NODE_ENV=cover nyc npm run test:integrations"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "es2016",
+      "react"
+    ],
+    "plugins": [
+      "babel-plugin-syntax-trailing-function-commas",
+      "babel-plugin-transform-class-properties",
+      "babel-plugin-transform-object-rest-spread",
+      "babel-plugin-transform-react-constant-elements"
+    ],
+    "env": {
+      "cover": {
+        "plugins": [
+          "babel-plugin-syntax-trailing-function-commas",
+          "babel-plugin-transform-class-properties",
+          "babel-plugin-transform-object-rest-spread",
+          "babel-plugin-transform-react-constant-elements",
+          "istanbul"
+        ]
+      }
+    }
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false,
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-plugin-istanbul": "^2.0.1",
+    "babel-plugin-syntax-trailing-function-commas": "^6.13.0",
+    "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-plugin-transform-react-constant-elements": "^6.9.1",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-es2016": "^6.11.3",
+    "babel-preset-react": "^6.11.1",
+    "chai": "^3.5.0",
+    "chai-immutable": "^1.6.0",
+    "css-modules-require-hook": "^4.0.2",
+    "enzyme": "^2.4.1",
+    "ignore-styles": "^5.0.1",
+    "jsdom": "^9.4.5",
+    "mocha": "^3.0.2",
+    "nyc": "^8.1.0",
+    "react-addons-test-utils": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "sinon": "^1.17.5",
+    "sinon-chai": "^2.8.0"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "react": "^15.3.1",
+    "react-addons-pure-render-mixin": "^15.3.1",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikfrank/tahini.git"
+  },
+  "keywords": [
+    "react",
+    "framework",
+    "lexical",
+    "scoping",
+    "components"
+  ],
+  "author": "nik frank",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikfrank/tahini/issues"
+  },
+  "homepage": "https://github.com/nikfrank/tahini#readme"
+}

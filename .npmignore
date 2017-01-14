@@ -1,0 +1,16 @@
+# production
+src/
+
+canon/
+integrations/
+
+# misc
+.DS_Store
+npm-debug.log
+
+# emacs
+*~
+
+# coverage
+coverage/
+.nyc_output/

@@ -1,0 +1,61 @@
+.controlPanel {
+  background: #fff;
+  border-radius: 2px;
+  display: block;
+  margin: 1rem;
+  position: relative;
+  box-shadow: 0 3px 6px rgba(127,0,0,0.16), 0 3px 6px rgba(127,0,0,0.23);
+  padding:4px;
+  
+  float:left;
+  height:81.5vh;
+  width:25vw;
+
+  overflow-y:auto;
+  
+  li {
+    margin-bottom:15px;
+  }
+}
+.item {
+  color:white;
+  background-color:darkred;
+  border-radius:5px;
+
+  margin:2px;
+  padding:2px;
+
+  width:50px;
+
+  &::after{
+    content:"x";
+    float:right;
+    color:yellow;
+
+    padding-right:2px;
+  }
+}
+.circleButtons {
+  .destroy, .reset {
+    
+    $size:60px;
+    
+    height:$size;
+    width:$size;
+
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+    
+    border-radius:50%;
+
+    background-color:#f66;
+
+    &:hover {
+      background-color:#a11;
+    }
+    &:active {
+      background-color:#600;
+    }
+  }
+}

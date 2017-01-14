@@ -1,0 +1,22 @@
+/* material design box shadows based on https://medium.com/%40Florian/freebie-google-material-design-shadow-helper-2a0501295a2d */
+
+.card {
+  background: #fff;
+  border-radius: 2px;
+  display: block;
+  height: 300px;
+  margin: 1rem;
+  position: relative;
+  width: 300px;
+  box-shadow: 0 3px 6px rgba(0,127,0,0.16), 0 3px 6px rgba(0,127,0,0.23);
+  float:left;
+  
+  &.active {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    background-color:yellowgreen;
+  }
+}
+
+button.reset {
+  color:blue;
+}

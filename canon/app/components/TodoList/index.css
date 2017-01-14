@@ -1,0 +1,9 @@
+.todoList {
+  color:green;
+}
+button.destroy {
+  color:red;
+}
+button.add {
+  color:orange;
+}
