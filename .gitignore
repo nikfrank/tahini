@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+
+# # production
+dist/
+
+# misc
+.DS_Store
+npm-debug.log
+
+# emacs
+*~
+
+# coverage
+coverage/
+.nyc_output/
