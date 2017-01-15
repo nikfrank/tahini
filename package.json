@@ -1,14 +1,16 @@
 {
   "name": "tahini",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "flexible vocabulary scoping for react",
   "scripts": {
     "build": "babel -d dist/ src/",
     "version": "npm run build && npm publish #also bump version",
-    "test": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
-    "test:watch": "npm run test -- --watch --watch-extensions js",
-    "test:w": "npm run test:watch",
-    "test:cover": "NODE_ENV=cover nyc npm run test",
+    "test":"npm link && npm run test:i",
+    "test:i": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
+    
+    "test:watch": "npm run test:1 -- --watch --watch-extensions js",
+    "test:w": "npm run test:i:watch",
+    "test:cover": "NODE_ENV=cover nyc npm run test:i",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "babel": {
