@@ -1,8 +1,5 @@
-tahini
+# tahini
 
-woo
-
-(badges and CI integrations)
 [![Dependency Status](https://www.versioneye.com/user/projects/587bf9e120bf410033543c0d/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/587bf9e120bf410033543c0d)
 [![Coverage Status](https://coveralls.io/repos/nikfrank/tahini/badge.svg?branch=master)](https://coveralls.io/r/nikfrank/tahini?branch=master)
 [![Build Status](https://travis-ci.org/nikfrank/tahini.svg?branch=master)](https://travis-ci.org/nikfrank/tahini)
