@@ -4,6 +4,56 @@
 [![Coverage Status](https://coveralls.io/repos/nikfrank/tahini/badge.svg?branch=master)](https://coveralls.io/r/nikfrank/tahini?branch=master)
 [![Build Status](https://travis-ci.org/nikfrank/tahini.svg?branch=master)](https://travis-ci.org/nikfrank/tahini)
 
+tahini is a framework for react redux immutable applications
+
+it solves problems of
+- state modularity
+- component reusability
+- normalization of actions
+- app wide metaprogramming
+
+it is opinionated and yet tries to not impose / cramp your style.
+
+
+future development will be geared toward:
+- test legibility and brevity
+- network modules for sockets / RTC
+- middleware for redo/ undo, remote control, bug reproducer
+- serialized JSON routing
+- react native, isomorphism
+
+
+
+(topics list)
+
+
+## Devices (because I don't want to call them components)
+
+(file structure)
+
+(explanation of all the moving parts)
+
+(using ko to make one)
+
+(example & tests bullshit device)
+
+(example & tests two devices side by side sandboxed)
+
+(example & tests for pure components, actionCreator prop)
+
+(example & tests for network layer)
+
+---
+
+(example standalone network middleware usage)
+
+(example for reflection)
+
+===
+===
+
+## Philosophical crap you can read if you're bored
+
 ### State Management
 
 React made good on SOCg state logic out of view ctrls, but it caused us the issue of global scope for that state.
@@ -31,24 +81,11 @@ The point is to maintain flexibility as project size increases. ie, you never ha
 When you can reason more abstractly about your app from within itself, you'll be able to overcome your own legacy stupidity :)
 
 
-
-(example two devices side by side sandboxed)
-
-(topics list)
-
-(example & tests for pure components, actionCreator prop)
-
-(example & tests for network layer)
-
----
-
-(example standalone network middleware usage)
-
-(example for reflection)
-
 ===
 
-((react native integration))
+## future dev
+
+((react native integration & isomorphism))
 
 ((reified management concept, using it to resolve action triggers))
 
@@ -57,6 +94,11 @@ When you can reason more abstractly about your app from within itself, you'll be
 ((unsubscribe from partial substate))
 
 ((JSON serial routing))
+
+- test legibility and brevity
+- network modules for sockets / RTC
+- middleware for redo/ undo, remote control, bug reproducer
+
 
 ---
 ===
