@@ -1,15 +1,15 @@
 {
   "name": "tahini",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "flexible vocabulary scoping for react",
   "scripts": {
     "build": "babel -d dist/ src/",
     "version": "npm run build && npm publish #also bump version",
-    "test:integrations": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
-    "test:i": "npm run test:integrations",
-    "test:integrations:watch": "npm run test:integrations -- --watch --watch-extensions js",
-    "test:i:w": "npm run test:integrations:watch",
-    "test:integrations:cover": "NODE_ENV=cover nyc npm run test:integrations"
+    "test": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
+    "test:watch": "npm run test -- --watch --watch-extensions js",
+    "test:w": "npm run test:watch",
+    "test:cover": "NODE_ENV=cover nyc npm run test",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "babel": {
     "presets": [
@@ -61,6 +61,7 @@
     "babel-preset-react": "^6.11.1",
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
+    "coveralls": "^2.11.15",
     "css-modules-require-hook": "^4.0.2",
     "enzyme": "^2.4.1",
     "ignore-styles": "^5.0.1",
