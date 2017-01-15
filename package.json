@@ -5,7 +5,7 @@
   "scripts": {
     "build": "babel -d dist/ src/",
     "version": "npm run build && npm publish #also bump version",
-    "test":"npm link && cd canon && npm link tahini && cd .. && npm run test:i",
+    "test":"npm build && npm link && cd canon && npm link tahini && cd .. && npm run test:i",
     "test:i": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
     
     "test:watch": "npm run test:1 -- --watch --watch-extensions js",
