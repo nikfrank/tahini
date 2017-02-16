@@ -85,13 +85,14 @@ Ok, so how do I call whatever action creator, and wtf is subState?
 
 ## subStates
 
-... explanation of subStates, default behaviour or the boot process
-
+- explanation of subStates, default behaviour or the boot process
+- rendering data out of this.props.subState
 
 
 ## network layer
 
 infrastructure, vocabulary
+
 
 ### network handlers
 
@@ -99,7 +100,28 @@ infrastructure, vocabulary
 - demo connecting to a socket
 - demo RTC chat application ((!))
 
-future development will be geared toward:
+
+
+## under the hood - Devices
+
+- connecting Actions, Reducers, and subStates to Components
+- sensible default behaviour
+- explanation of this.props.getDevice and how to use it
+- explanation of WHY to use it
+
+
+## reflection
+
+- this.props.reflectors
+- inspiration
+- use cases
+
+---
+---
+---
+---
+
+##### future development will be geared toward:
 - test legibility and brevity
 - network modules for sockets / RTC
 - middleware for redo/ undo, remote control, bug reproducer
