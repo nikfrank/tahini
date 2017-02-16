@@ -48,10 +48,10 @@ export const bootApp = function(middleware = [], reducerHash = baseReducerHash()
   const reflection = createReflection();
 
   const getDevice = (deviceClass, dataPath = [], initStateOrUpdater)=>{
+    if( !deviceClass.actions ) deviceClass.actions = {};
+    if( !deviceClass.namespace ) deviceClass.namespace = deviceClass.name;
+    if( !deviceClass.reducer ) deviceClass.reducer = {};
 
-    // autonamespacing
-    // default actions, reducer
-    
     actionCreatorHash[deviceClass.namespace] = deviceClass.actions;
     
     reflection.mountDevice({
