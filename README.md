@@ -89,7 +89,15 @@ Ok, so how do I call whatever action creator, and wtf is subState?
 
 
 
+## network layer
 
+infrastructure, vocabulary
+
+### network handlers
+
+- demo consuming a CRUD API
+- demo connecting to a socket
+- demo RTC chat application ((!))
 
 future development will be geared toward:
 - test legibility and brevity
