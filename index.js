@@ -1,8 +1,11 @@
 'use strict';
 
-var devices = require('./dist/devices');
-var util = require('./dist/util');
 var Base = require('./dist/base-class').default;
+var util = require('./dist/util');
+var devices = require('./dist/devices');
+var stores = require('./dist/stores');
+var routing = require('./dist/routing');
+var booting = require('./dist/booting');
 
 var networkMiddleware = require('./dist/network-middleware').default;
 var networkHandlers = require('./dist/network-handlers').default;
@@ -11,10 +14,13 @@ module.exports = {
   Base: Base,
   networkMiddleware: networkMiddleware,
   networkHandlers: networkHandlers,
-  bootApp: devices.bootApp,
   consumeActionByNamespace: util.consumeActionByNamespace,
   isolateMutationByDataPath: util.isolateMutationByDataPath,
-  baseReducerHash: devices.baseReducerHash,
   applyPartialAction: util.applyPartialAction,
-  connectToLexicalScope: devices.connectToLexicalScope
+  bootStores: stores.bootStores,
+  baseReducerHash: stores.baseReducerHash,
+  connectToLexicalScope: devices.connectToLexicalScope,
+  connectDeviceFactory: devices.connectDeviceFactory,
+  bootAppWithRoutes: routing.bootAppWithRoutes,
+  bootApp: booting.bootApp,
 };
