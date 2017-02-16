@@ -48,6 +48,9 @@ export const bootApp = function(middleware = [], reducerHash = baseReducerHash()
   const reflection = createReflection();
 
   const getDevice = (deviceClass, dataPath = [], initStateOrUpdater)=>{
+
+    // autonamespacing
+    // default actions, reducer
     
     actionCreatorHash[deviceClass.namespace] = deviceClass.actions;
     

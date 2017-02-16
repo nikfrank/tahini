@@ -99,6 +99,10 @@ When you can reason more abstractly about your app from within itself, you'll be
 - network modules for sockets / RTC
 - middleware for redo/ undo, remote control, bug reproducer
 
+middleware/ network layer CACHE (with its own redux store?)
+could be used for "get at least # of something" queries
+or offline mode
+would sit in front of the standard network middleware
 
 ---
 ===
@@ -108,3 +112,8 @@ When you can reason more abstractly about your app from within itself, you'll be
 (use w create-react-app, or whatever else is cool)
 
 (use w webpack css tooling)
+
+===
+===
+
+besides for "owning" part of the total app state, are there any other more useful selection strategies?
