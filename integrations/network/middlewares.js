@@ -6,7 +6,8 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
 import {
-  bootApp,
+  connectDeviceFactory,
+  bootStores,
   
   networkMiddleware,
   networkHandlers
@@ -330,10 +331,13 @@ describe('networkMiddleware', ()=>{
   
   it('integrates withe framework injector, errs on non-existant handler', ()=>{
     const activeHandlers = {};
-    
-    const { getDevice, appStore } = bootApp( [
+
+    const stores = bootStores( [
       networkMiddleware(networkHandlers, activeHandlers)
     ] );
+
+    const { appStore } = stores;
+    const { getDevice } = connectDeviceFactory( stores );
 
     let isError = false;
 

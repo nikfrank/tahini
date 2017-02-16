@@ -3,13 +3,18 @@ import { expect } from 'chai';
 
 import React from 'react';
 
-import { Base, bootApp } from '../../test-index';
+import {
+  Base, connectDeviceFactory, bootStores
+} from '../../test-index';
 
 describe('reducer initialization', ()=>{
   it('assigns the device-reducer to the global reducerHash on its namespace', ()=>{
-
-    const { getDevice, reducerHash } = bootApp();
     
+    const stores = bootStores();
+
+    const { reducerHash } = stores;
+    const { getDevice } = connectDeviceFactory( stores );
+
     expect(Object.keys(reducerHash)).to.eql(['global']);
 
     // creating the first of a type will assign its reducer onto the global reducer hash

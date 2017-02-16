@@ -17,7 +17,6 @@ export const connectDeviceFactory = ({ appStore, reflection, actionCreatorHash, 
   const updateStateOnDataPath = (dataPath, updater)=>
     initStateOnDataPath(dataPath, updater(appStore.getState().getIn(dataPath)));
 
-
   const getDevice = (deviceClass, dataPath = [], initStateOrUpdater)=>{
     if( !deviceClass.actions ) deviceClass.actions = {};
     if( !deviceClass.namespace ) deviceClass.namespace = deviceClass.name;
@@ -72,7 +71,7 @@ export const connectDeviceFactory = ({ appStore, reflection, actionCreatorHash, 
     return device;
   };
 
-  return { getDevice };
+  return { getDevice, initStateOnDataPath, updateStateOnDataPath };
 };
 
 

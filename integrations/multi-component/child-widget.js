@@ -11,7 +11,7 @@ import { fromJS } from 'immutable';
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { bootApp } from '../../test-index';
+import { connectDeviceFactory, bootStores } from '../../test-index';
 
 import Dashboard from '../../canon/app/components/Dashboard';
 import TodoList from '../../canon/app/components/TodoList';
@@ -21,8 +21,14 @@ import SortedTodoList from '../../canon/app/components/SortedTodoList';
 
 describe('child device', ()=>{
   it('generates a device who can generate sub-devices', (done)=>{
-    const { getDevice, initStateOnDataPath, appStore } = bootApp();
 
+    const stores = bootStores();
+    
+    const { getDevice, initStateOnDataPath } =
+      connectDeviceFactory( stores );
+
+    const { appStore } = stores;
+    
     const dataPath = ['data', 'path'];
     
     const BoundDashboard = getDevice(Dashboard, dataPath, Dashboard.initState);
