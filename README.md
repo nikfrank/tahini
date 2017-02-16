@@ -223,3 +223,8 @@ would sit in front of the standard network middleware
 ===
 
 besides for "owning" part of the total app state, are there any other more useful selection strategies?
+
+
+README written using
+
+github.com/nikfrank/readme-live
