@@ -13,7 +13,11 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
 
-import { Base, bootApp, networkMiddleware } from 'tahini';
+import {
+  bootStores,
+  connectDeviceFactory,
+  networkMiddleware
+} from 'tahini';
 import networkHandlers from '../../network/';
 
 
@@ -152,7 +156,10 @@ describe('ControlPanel', ()=>{
   });
   
   it('calls the api', (done)=>{
-    const { getDevice, appStore } = bootApp( [networkMiddleware(networkHandlers)] );
+    const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
+    const { getDevice } = connectDeviceFactory( stores );
+
+    const { appStore } = stores;
 
     // perhaps to test that only 5 show
 

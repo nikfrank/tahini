@@ -12,9 +12,12 @@ import {
 
 export const bootApp = (middleware, routes)=>{
 
-  // test this with vanilla components for routeViews
+  if(!routes) 
+    throw 'cannot bootApp without at least a root Component';
 
+  // test this with vanilla components for routeViews
+    
   // take just a list of routeComponents? sensibly default the rest
   
-  return bootAppWithRoutes( connectDeviceFactory( bootStores(middleware) ), routes );
+  return bootAppWithRoutes( connectDeviceFactory( bootStores(middleware) ), routes);
 };
