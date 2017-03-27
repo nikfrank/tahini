@@ -8,7 +8,10 @@ import SortedTodoList from './index.js';
 import styles from './index.css';
 import todoListStyles from '../TodoList/index.css';
 
-import { bootApp } from 'tahini';
+import {
+  bootStores,
+  connectDeviceFactory,
+} from 'tahini';
 
 describe('SortedTodoList', ()=>{
 
@@ -39,7 +42,10 @@ describe('SortedTodoList', ()=>{
     const dataPath = [];
     
     beforeEach(()=>{
-      ({ getDevice, appStore } = bootApp());
+      const stores = bootStores();
+      ({ getDevice } = connectDeviceFactory( stores ));
+      ({ appStore } = stores);
+      
       BoundSortedTodoList = getDevice(SortedTodoList, dataPath, SortedTodoList.initState);
 
       p = mount(<BoundSortedTodoList/>);

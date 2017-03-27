@@ -1,16 +1,28 @@
 import Base from './src/base-class';
 
 import {
-  bootApp,
+  bootStores,
   baseReducerHash
+} from './src/stores';
+
+import {
+  connectToLexicalScope,
+  connectDeviceFactory
 } from './src/devices';
 
 import {
   consumeActionByNamespace,
   isolateMutationByDataPath,
-  applyPartialAction,
-  connectToLexicalScope
+  applyPartialAction
 } from './src/util';
+
+import {
+  bootAppWithRoutes
+} from './src/routing';
+
+import {
+  bootApp
+} from './src/booting';
 
 import networkMiddleware from './src/network-middleware';
 
@@ -20,10 +32,12 @@ export {
   Base,
   networkMiddleware,
   networkHandlers,
-  bootApp,
+  bootStores,
   consumeActionByNamespace,
   isolateMutationByDataPath,
   baseReducerHash,
   applyPartialAction,
-  connectToLexicalScope
+  connectToLexicalScope,
+  connectDeviceFactory,
+  bootApp
 };

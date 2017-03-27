@@ -5,7 +5,7 @@
   "scripts": {
     "build": "babel -d dist/ src/",
     "version": "npm run build && npm publish #also bump version",
-    "test":"npm run build && npm link && cd canon && npm i && npm link tahini && cd .. && npm run test:cover",
+    "test": "npm run build && npm link && cd canon && npm i && npm link tahini && cd .. && npm run test:cover",
     "test:i": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
     "test:watch": "npm run test:i -- --watch --watch-extensions js",
     "test:w": "npm run test:watch",
@@ -79,6 +79,7 @@
     "react": "^15.3.1",
     "react-addons-pure-render-mixin": "^15.3.1",
     "react-redux": "^4.4.5",
+    "react-router": "^3.0.2",
     "redux": "^3.5.2"
   },
   "repository": {

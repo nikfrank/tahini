@@ -15,15 +15,18 @@ import React from 'react';
 import TodoList from '../../canon/app/components/TodoList';
 import { RemovableItem } from '../../canon/app/pure/RemovableItem';
 
-import { bootApp } from '../../test-index';
+import { connectDeviceFactory, bootStores } from '../../test-index';
 
 describe('widget with a pure child', ()=>{  
   //
   // before block
   //
-  
-  const { getDevice, appStore } = bootApp();
 
+  const stores = bootStores();
+  const { getDevice } = connectDeviceFactory( stores );
+
+  const { appStore } = stores;
+  
   // spy on the todo list's removeTodo function
   const spyOnRemoveTodo = sinon.spy(TodoList.prototype, 'removeTodo');
 

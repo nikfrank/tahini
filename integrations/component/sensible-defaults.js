@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 
+
 import React from 'react';
 
-import { bootApp } from '../../test-index';
+import { connectDeviceFactory, bootStores } from '../../test-index';
 
 // need to test prop and children passing
 // also default props setting/ getting?
@@ -11,7 +12,7 @@ describe('Using non-Base aka vanilla react components', ()=>{
 
   it('gets a component instance', ()=>{
     
-    const { getDevice } = bootApp();
+    const { getDevice } = connectDeviceFactory( bootStores() );
 
     const testProps = {test:'prop'};
     const testChildren = {test:'children'};

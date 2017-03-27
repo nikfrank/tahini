@@ -6,7 +6,10 @@ chai.use(chaiImmutable);
 import { mount, shallow } from 'enzyme';
 import React from 'react';
 
-import { bootApp } from 'tahini';
+import {
+  bootStores,
+  connectDeviceFactory,
+} from 'tahini';
 
 import Dashboard from 'components/Dashboard';
 import TodoList from 'components/TodoList';
@@ -17,8 +20,8 @@ import todoStyles from 'components/TodoList/index.css';
 
 describe('Route level widgets', ()=>{
   it('generate devices who can generate sub-devices', ()=>{
-    const { getDevice } = bootApp();
-
+    const { getDevice } = connectDeviceFactory( bootStores() );
+    
     const BoundDashboard = getDevice(Dashboard, ['data', 'path'], Dashboard.initState);
     const el = mount(<BoundDashboard/>);
    

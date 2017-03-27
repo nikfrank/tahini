@@ -16,7 +16,10 @@ import { TodoListItem } from 'pure/TodoListItem/';
 import { RemovableItem } from 'pure/RemovableItem';
 
 
-import { bootApp } from 'tahini';
+import {
+  bootStores,
+  connectDeviceFactory,
+} from 'tahini';
 
 describe('TodoList', ()=>{
 
@@ -60,7 +63,9 @@ describe('TodoList', ()=>{
     const dataPath = [];
     
     beforeEach(()=>{
-      ({ getDevice, appStore } = bootApp());
+      const stores = bootStores();
+      ({ getDevice } = connectDeviceFactory( stores ));
+      ({ appStore } = stores);
 
       spyOnRemoveTodo.reset();
       

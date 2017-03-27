@@ -23,7 +23,11 @@ import TodoList from '../TodoList';
 import SortedTodoList from '../SortedTodoList';
 import todoListStyles from '../TodoList/index.css';
 
-import { Base, bootApp } from 'tahini';
+import {
+  Base,
+  bootStores,
+  connectDeviceFactory,
+} from 'tahini';
 
 describe('Dashboard', ()=>{
 
@@ -76,7 +80,10 @@ describe('Dashboard', ()=>{
     const dataPath = [];
     
     beforeEach(()=>{
-      ({ getDevice, appStore } = bootApp());
+      const stores = bootStores();
+      ({ getDevice } = connectDeviceFactory( stores ));
+      ({ appStore } = stores);
+      
       BoundDashboard = getDevice(Dashboard, dataPath, Dashboard.initState);
       
       p = mount(<BoundDashboard/>);

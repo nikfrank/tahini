@@ -5,14 +5,17 @@ import { mount } from 'enzyme';
 
 import TodoList from '../../canon/app/components/TodoList';
 
-import { bootApp } from '../../test-index';
+import { connectDeviceFactory, bootStores } from '../../test-index';
 
 describe('component action isolation', ()=>{
   it('namespaces the component action creators', ()=>{
-    
-    const { getDevice, appStore } = bootApp();
+
+    const stores = bootStores();
+
+    const { appStore } = stores;
+    const { getDevice } = connectDeviceFactory( stores );
+
     const Device = getDevice(TodoList, [], TodoList.initState);
-    
     
     const el = mount(React.createElement(Device));
     const addTodoAC = el.node.mergedProps.addTodo;

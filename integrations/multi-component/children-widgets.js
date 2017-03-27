@@ -8,12 +8,15 @@ import { fromJS } from 'immutable';
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { Base, bootApp } from '../../test-index';
+import {
+  Base, connectDeviceFactory, bootStores
+} from '../../test-index';
 
 
 describe('child widget', ()=>{
   it('generates a widget who can generate sub-widgets', ()=>{
-    const { getDevice, initStateOnDataPath } = bootApp();
+    const { getDevice, initStateOnDataPath } =
+      connectDeviceFactory( bootStores() );
 
     const dataPath = ['data', 'path'];
     
