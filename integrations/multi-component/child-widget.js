@@ -45,7 +45,7 @@ describe('child device', ()=>{
     const p = mount(<BoundDashboard/>);
 
     // this due to the child devices initing their state under the parent's
-    expect(p.node.mergedProps.subState).to.not.eql(fromJS(Dashboard.initState));
+    expect(p.node.selector.props.subState).to.not.eql(fromJS(Dashboard.initState));
 
     // +1 for control panel
     expect(gdSpy.callCount).to.eql(Dashboard.initState.get('devices').size +1);

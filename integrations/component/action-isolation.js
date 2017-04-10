@@ -17,8 +17,9 @@ describe('component action isolation', ()=>{
 
     const Device = getDevice(TodoList, [], TodoList.initState);
     
-    const el = mount(React.createElement(Device));
-    const addTodoAC = el.node.mergedProps.addTodo;
+    const el = mount(<Device />);
+
+    const addTodoAC = el.node.selector.props.addTodo;
     const action = addTodoAC('test-item');
 
     expect(action.namespace).to.eql(TodoList.namespace);

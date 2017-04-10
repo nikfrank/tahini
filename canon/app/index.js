@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {render} from 'react-dom';
 
 import TodoList from './components/TodoList/';
@@ -9,10 +9,12 @@ import './index.css';
 
 import { bootApp, networkMiddleware } from 'tahini';
 
-class Home extends React.Component {
+class Home extends Component {
   render(){
+    console.log('blah');
     return (
       <div>
+        blah
 	{this.props.children}
       </div>
     );
@@ -22,17 +24,17 @@ class Home extends React.Component {
 
 const routes = [
   {
-    routePath:'todo-list',
+    routePath:'/todo-list',
     dataPath:['todo-list'],
     componentClass:TodoList
   },
   {
-    routePath:'sorted-todo-list',
+    routePath:'/sorted-todo-list',
     dataPath:['sorted-todo-list'],
     componentClass:SortedTodoList
   },
   {
-    routePath:'dashboard',
+    routePath:'/dashboard',
     dataPath:['dashboard'],
     componentClass:Dashboard
   }
@@ -43,7 +45,6 @@ routes[1].subRoutes = [routes[0]];
 const rootRoute = {
   routePath:'/home',
   dataPath:[],
-  componentClass:Home,
   subRoutes:routes
 };
 
@@ -59,6 +60,6 @@ const logger = store => next => action => {
 import networkHandlers from './network/';
 
 render(
-  bootApp( [ networkMiddleware(networkHandlers) ], rootRoute ),
+  bootApp( [ networkMiddleware(networkHandlers) ], routes ),
   document.getElementById('root')
 );

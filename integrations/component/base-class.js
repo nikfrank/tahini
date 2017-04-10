@@ -23,9 +23,10 @@ describe('Base class', ()=>{
     const testProps = {test:'prop'};
     const testChildren = {test:'children'};
     
-    const C = React.createElement( getDevice(Base, ['data', 'path']),
-				   testProps, testChildren);
+    const CDevice = getDevice(Base, ['data', 'path']);
 
+    const C = (<CDevice {...testProps}>{testChildren}</CDevice>);
+    
     expect(C.type.displayName).to.eql('Connect(Base)');
     
     expect(C.props.test).to.eql(testProps.test);

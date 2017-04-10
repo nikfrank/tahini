@@ -56,12 +56,12 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "react": "^15.2.1",
+    "react": "^15.5.3",
     "react-addons-pure-render-mixin": "^15.3.0",
-    "react-dom": "^15.2.1",
-    "react-redux": "^4.4.5",
-    "react-router": "^2.6.1",
-    "redux": "^3.5.2"
+    "react-dom": "^15.5.3",
+    "react-redux": "^5.0.4",
+    "react-router": "^4.0.0",
+    "redux": "^3.6.0"
   },
   "babel": {
     "presets": [
@@ -100,8 +100,8 @@
     "include": [
       "app/**/index.js",
       "app/**/reducer.js",
-	"app/**/actions.js",
-	"app/network/**/index.js"
+      "app/**/actions.js",
+      "app/network/**/index.js"
     ],
     "require": [
       "babel-register"

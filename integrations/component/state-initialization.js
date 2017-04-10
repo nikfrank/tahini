@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { fromJS } from 'immutable';
 import React from 'react';
 
-import { renderIntoDocument } from 'react-addons-test-utils';
+import { mount } from 'enzyme';
 
 import {
   Base, connectDeviceFactory, bootStores
@@ -15,9 +15,9 @@ describe('State initialization', ()=>{
     const { getDevice } = connectDeviceFactory( bootStores() );
 
     const C = getDevice(Base, ['data', 'path'], Base.initState);
-    const el = renderIntoDocument(<C/>);
+    const el = mount(<C/>);
 
-    expect(el.renderedElement.props.subState).to.eql(fromJS(Base.initState));
+    expect(el.node.selector.props.subState).to.eql(fromJS(Base.initState));
   });
 
   
@@ -25,9 +25,9 @@ describe('State initialization', ()=>{
     const testState = {test:'state'};
     const { getDevice } = connectDeviceFactory( bootStores() );
     const C = getDevice(Base, ['data', 'path'], testState);
-    const el = renderIntoDocument(<C/>);
+    const el = mount(<C/>);
 
-    expect(el.renderedElement.props.subState).to.eql(fromJS(testState));
+    expect(el.node.selector.props.subState).to.eql(fromJS(testState));
   });
 
   
@@ -41,9 +41,9 @@ describe('State initialization', ()=>{
     initStateOnDataPath(dataPath, testState);
     
     const C = getDevice(Base, dataPath);
-    const el = renderIntoDocument(<C/>);
+    const el = mount(<C/>);
 
-    expect(el.renderedElement.props.subState).to.eql(fromJS(testState));
+    expect(el.node.selector.props.subState).to.eql(fromJS(testState));
   });
 
   it('updates an existing state when binding a new widget', ()=>{
@@ -57,8 +57,8 @@ describe('State initialization', ()=>{
     initStateOnDataPath(dataPath, testState);
     
     const C = getDevice(Base, dataPath, subState=> subState.update('test', test=> 'sub'+test));
-    const el = renderIntoDocument(<C/>);
+    const el = mount(<C/>);
 
-    expect(el.renderedElement.props.subState).to.eql(fromJS(testStateUpdated));
+    expect(el.node.selector.props.subState).to.eql(fromJS(testStateUpdated));
   });
 });

@@ -25,7 +25,7 @@ describe('child widget', ()=>{
     const BoundBase = getDevice(Base, dataPath);
     const el = mount(<BoundBase/>);
     
-    expect(el.node.mergedProps.subState).to.eql(fromJS(Base.initState));
+    expect(el.node.selector.props.subState).to.eql(fromJS(Base.initState));
 
 
     // use a Dashboard

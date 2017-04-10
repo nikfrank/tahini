@@ -1,14 +1,22 @@
 import React from 'react';
-import {Router, Route, hashHistory} from 'react-router';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-export const bootAppWithRoutes = ({ getDevice }, rootRoute = new Error('cannot bootAppWithRoutes without any routes'))=>{
+import createBrowserHistory from 'history/createBrowserHistory';
+
+const history = createBrowserHistory();
+
+export const bootAppWithRoutes = ({ getDevice }, routes = new Error('cannot bootAppWithRoutes without any routes'))=>{
 
   const getRoute = ({routePath, dataPath, componentClass, subRoutes=[]})=>(
     <Route path={routePath || componentClass.namespace} key={routePath}
-	   component={getDevice(componentClass, dataPath, componentClass.initState)}>
-      {subRoutes.map(getRoute)}
-    </Route>
+	   component={getDevice(componentClass, dataPath, componentClass.initState)} />
   );
 
-  return (<Router history={hashHistory} routes={[rootRoute].map(getRoute)}/>);
+  return (
+    <Router history={history}>
+      <div>
+        {routes.map(getRoute)}
+      </div>
+    </Router>
+  );
 };
