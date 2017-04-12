@@ -17,10 +17,6 @@ import {
 } from './src/util';
 
 import {
-  bootAppWithRoutes
-} from './src/routing';
-
-import {
   bootApp
 } from './src/booting';
 

@@ -4,7 +4,6 @@ var Base = require('./dist/base-class').default;
 var util = require('./dist/util');
 var devices = require('./dist/devices');
 var stores = require('./dist/stores');
-var routing = require('./dist/routing');
 var booting = require('./dist/booting');
 
 var networkMiddleware = require('./dist/network-middleware').default;
@@ -21,6 +20,5 @@ module.exports = {
   baseReducerHash: stores.baseReducerHash,
   connectToLexicalScope: devices.connectToLexicalScope,
   connectDeviceFactory: devices.connectDeviceFactory,
-  bootAppWithRoutes: routing.bootAppWithRoutes,
   bootApp: booting.bootApp,
 };

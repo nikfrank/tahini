@@ -1,12 +1,12 @@
 {
   "name": "tahini",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "flexible vocabulary scoping for react",
   "scripts": {
     "build": "babel -d dist/ src/",
     "version": "npm run build && npm publish #also bump version",
-    "test": "npm run build && npm link && cd canon && npm i && npm link tahini && cd .. && npm run test:cover",
-    "test:i": "NODE_PATH=./app mocha --require ignore-styles ./canon/scripts/test/with-jsdom.js ./canon/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
+    "test": "npm run build && npm link && cd canon/todo-app && yarn && npm link tahini && cd .. && npm run test:cover",
+    "test:i": "NODE_PATH=./app mocha --require ignore-styles ./canon/todo-app/scripts/test/with-jsdom.js ./canon/todo-app/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
     "test:watch": "npm run test:i -- --watch --watch-extensions js",
     "test:w": "npm run test:watch",
     "test:cover": "NODE_ENV=cover nyc npm run test:i",
@@ -75,13 +75,10 @@
     "sinon-chai": "^2.8.0"
   },
   "dependencies": {
-    "history": "^4.6.1",
     "immutable": "^3.8.1",
     "react": "^15.5.3",
     "react-addons-pure-render-mixin": "^15.3.1",
     "react-redux": "^5.0.4",
-    "react-router": "^4.0.0",
-    "react-router-dom": "^4.0.0",
     "redux": "^3.6.0"
   },
   "repository": {
