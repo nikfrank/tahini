@@ -1,11 +1,11 @@
 {
   "name": "tahini",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "flexible vocabulary scoping for react",
   "scripts": {
     "build": "babel -d dist/ src/",
     "version": "npm run build && npm publish #also bump version",
-    "test": "npm run build && npm link && cd canon/todo-app && yarn && npm link tahini && cd .. && npm run test:cover",
+    "test": "npm run build && npm link && cd canon/todo-app && yarn && npm link tahini && cd ../.. && npm run test:cover",
     "test:i": "NODE_PATH=./app mocha --require ignore-styles ./canon/todo-app/scripts/test/with-jsdom.js ./canon/todo-app/scripts/test/with-css-modules.js \"./integrations/**/*.js\" \"./src/network-handlers/*/spec.js\" --compilers js:babel-core/register",
     "test:watch": "npm run test:i -- --watch --watch-extensions js",
     "test:w": "npm run test:watch",

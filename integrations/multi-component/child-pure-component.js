@@ -12,8 +12,8 @@ import { mount } from 'enzyme';
 
 import React from 'react';
 
-import TodoList from '../../canon/app/components/TodoList';
-import { RemovableItem } from '../../canon/app/pure/RemovableItem';
+import TodoList from '../../canon/todo-app/app/components/TodoList';
+import { RemovableItem } from '../../canon/todo-app/app/pure/RemovableItem';
 
 import { connectDeviceFactory, bootStores } from '../../test-index';
 

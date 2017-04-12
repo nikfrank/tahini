@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import React from 'react';
 import { mount } from 'enzyme';
 
-import TodoList from '../../canon/app/components/TodoList';
+import TodoList from '../../canon/todo-app/app/components/TodoList';
 
 import { connectDeviceFactory, bootStores } from '../../test-index';
 

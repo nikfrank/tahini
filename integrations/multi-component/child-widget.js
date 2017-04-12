@@ -13,11 +13,11 @@ import { mount } from 'enzyme';
 
 import { connectDeviceFactory, bootStores } from '../../test-index';
 
-import Dashboard from '../../canon/app/components/Dashboard';
-import TodoList from '../../canon/app/components/TodoList';
-import todoListStyles from '../../canon/app/components/TodoList/index.css';
+import Dashboard from '../../canon/todo-app/app/components/Dashboard';
+import TodoList from '../../canon/todo-app/app/components/TodoList';
+import todoListStyles from '../../canon/todo-app/app/components/TodoList/index.css';
 
-import SortedTodoList from '../../canon/app/components/SortedTodoList';
+import SortedTodoList from '../../canon/todo-app/app/components/SortedTodoList';
 
 describe('child device', ()=>{
   it('generates a device who can generate sub-devices', (done)=>{
