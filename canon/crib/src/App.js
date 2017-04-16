@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { fromJS } from 'immutable';
+
 import logo from './logo.svg';
 import './App.css';
 
-import { fromJS } from 'immutable';
+import Hand from './Hand/';
 
 class App extends Component {
   static get initState(){
@@ -24,6 +26,7 @@ class App extends Component {
         <p>
           {this.props.subState.get('test')}
         </p>
+        <Hand/>
       </div>
     );
   }
