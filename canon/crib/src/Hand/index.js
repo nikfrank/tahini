@@ -1,9 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default (props) => (
-  <svg width="600" height="400">
-    <use xlinkHref="svg-cards.svg#back" x="0" y="10" fill="blue"/>
-    <use xlinkHref="svg-cards.svg#1_club" x="170" y="10"/>
-    <use xlinkHref="svg-cards.svg#king_heart" x="340" y="10"/>
-  </svg>
+import Card from '../Card/';
+
+export default ({ cards, score }) => (
+  <div>
+    <svg width="850" height="400">
+      {
+        cards.map( (card, i) => (
+          <Card key={i} card={card} offset={i*170} />
+        ) )
+      }
+    </svg>
+    <div>{score}</div>
+  </div>
 );
