@@ -25,9 +25,10 @@ class App extends Component {
     return {
       // make a random hand from nu
       // and score it
-      deal: (subState, { payload: cards }) => subState
-        .set('score', score(cards.slice(0, 4), cards.slice(4)) )
-        .set('cards', fromJS(cards)),
+      deal: (subState, { payload: [cut, ...cards] }) => subState
+        .set('score', score(cards, cut) )
+        .set('cards', fromJS(cards))
+        .set('cut', fromJS(cut)),
     };
   }
   
@@ -35,6 +36,7 @@ class App extends Component {
     return fromJS({
       test: 'state',
       cards: [],
+      cut: {},
       score: 12,
     });
   }
@@ -48,6 +50,7 @@ class App extends Component {
         </div>
         <button onClick={this.props.deal}> DEAL! </button>
         <Hand cards={this.props.subState.get('cards')}
+              cut={this.props.subState.get('cut')}
               score={this.props.subState.get('score')}/>
       </div>
     );
