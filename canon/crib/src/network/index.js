@@ -1,5 +1,5 @@
-import TestHTTP from './TestHTTP/';
+import GetDeal from './GetDeal/';
 
 export default {
-  TestHTTP,
+  GetDeal,
 };

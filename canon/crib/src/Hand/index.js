@@ -7,7 +7,7 @@ export default ({ cards, score }) => (
     <svg width="850" height="400">
       {
         cards.map( (card, i) => (
-          <Card key={i} card={card} offset={i*170} />
+          <Card key={i} rank={card.get('rank')} suit={card.get('suit')} offset={i*170} />
         ) )
       }
     </svg>

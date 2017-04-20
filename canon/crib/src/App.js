@@ -10,7 +10,11 @@ class App extends Component {
   static get actions(){
     return {
       deal: ()=>({
-        type: 'deal',
+        network: {
+          handler: 'GetDeal',
+          payload: { size: 5, burned: [] },
+          nextAction: { type: 'deal' },
+        },
       }),
     };
   }
@@ -19,14 +23,16 @@ class App extends Component {
     return {
       // make a random hand from nu
       // and score it
-      deal: (subState, action) => subState.set('score', 20),
+      deal: (subState, { payload: cards }) => subState
+        .set('score', 20)
+        .set('cards', fromJS(cards)),
     };
   }
   
   static get initState(){
     return fromJS({
       test: 'state',
-      cards: [ '10_heart', '10_club', '8_diamond', '9_heart', '7_spade'],
+      cards: [],
       score: 12,
     });
   }
