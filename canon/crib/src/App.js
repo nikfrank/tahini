@@ -6,6 +6,8 @@ import './App.css';
 
 import Hand from './Hand/';
 
+import score from './util/score';
+
 class App extends Component {
   static get actions(){
     return {
@@ -24,7 +26,7 @@ class App extends Component {
       // make a random hand from nu
       // and score it
       deal: (subState, { payload: cards }) => subState
-        .set('score', 20)
+        .set('score', score(cards.slice(0, 4), cards.slice(4)) )
         .set('cards', fromJS(cards)),
     };
   }
