@@ -9,8 +9,8 @@ import score from './score';
 
 import cases from './cases';
 
-cases.forEach(({ hand, cut, value }) =>
-  it('calculates the score for each hand correctly', ()=>{
+cases.forEach(({ hand, cut, value, name }) =>
+  it(`scores: ${name}`, ()=>{
     expect( score(hand, cut) ).toEqual( value );
   })
 );
