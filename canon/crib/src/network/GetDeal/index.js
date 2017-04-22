@@ -19,7 +19,7 @@ class GetDeal {
         cards.push({ rank, suit });
         liveBurned.push({ rank, suit });
       }
-      }
+    }
     
     this.next({ payload: cards });
   }

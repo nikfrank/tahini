@@ -5,6 +5,8 @@ import { networkHandlers } from 'tahini';
 const { it } = global;
 
 it('tests the request pattern', ()=>{
+  // should write some cases for this (size, burns)
+  
   const next = jest.fn();
   
   const dealer = new GetDeal(next);

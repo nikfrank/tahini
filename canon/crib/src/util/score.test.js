@@ -5,8 +5,12 @@ import score from './score';
 // write test case (hand)
 // expect it to score correctly
 
-// for each case, commit and push (for demo later)
+// for each case, commit and push (for article)
 
-it('calculates the score for each hand correctly', ()=>{
-  expect(6).toEqual(9);
-});
+import cases from './cases';
+
+cases.forEach(({ hand, cut, value }) =>
+  it('calculates the score for each hand correctly', ()=>{
+    expect( score(hand, cut) ).toEqual( value );
+  })
+);
