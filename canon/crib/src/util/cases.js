@@ -74,7 +74,7 @@ export default [
   {
     name: 'four run',
     hand: [
-      { rank: 8, suit: 2 },
+      { rank: 7, suit: 2 },
       { rank: 10, suit: 3 },
       { rank: 11, suit: 2 },
       { rank: 12, suit: 3 },
