@@ -41,11 +41,21 @@ export default (hand, cut = {}) => {
     '0110': 12,
     '1010': 12,
   }[runPattern] || 0;
-  
+
+  const ranks = cards.map( c => Math.min(10, c.rank) );
+
+  const fifteenPts =
+    Array( Math.pow(2, ranks.length) - 1)
+      .fill(1).map( (d, i) => ('0000'+(i+1).toString(2)).slice(-1 * ranks.length).split('') )
+      .filter( b =>
+        (b.reduce( (p, c, i) => (p + (1 * c) * ranks[i]), 0 ) === 15)
+      ).length * 2;
+
   total += dibsPts;
   total += pairPts;
   total += flushPts;
   total += runPts;
-
+  total += fifteenPts;
+  
   return total;
 };
