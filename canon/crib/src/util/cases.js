@@ -143,4 +143,102 @@ export default [
     value: 16,
   },
 
+  {
+    name: 'fifteen two',
+    hand: [
+      { rank: 10, suit: 2 },
+      { rank: 8, suit: 3 },
+      { rank: 3, suit: 2 },
+      { rank: 1, suit: 3 },
+    ],
+    cut: { rank: 5, suit: 3 },
+    value: 2,
+  },
+
+  {
+    name: 'fifteen two and a run of five',
+    hand: [
+      { rank: 1, suit: 2 },
+      { rank: 2, suit: 3 },
+      { rank: 3, suit: 2 },
+      { rank: 4, suit: 3 },
+    ],
+    cut: { rank: 5, suit: 3 },
+    value: 7,
+  },
+  
+  {
+    name: 'fifteen four',
+    hand: [
+      { rank: 10, suit: 2 },
+      { rank: 9, suit: 3 },
+      { rank: 3, suit: 2 },
+      { rank: 12, suit: 3 },
+    ],
+    cut: { rank: 5, suit: 3 },
+    value: 4,
+  },
+
+  
+  {
+    name: 'fifteen six',
+    hand: [
+      { rank: 10, suit: 2 },
+      { rank: 9, suit: 3 },
+      { rank: 13, suit: 2 },
+      { rank: 12, suit: 3 },
+    ],
+    cut: { rank: 5, suit: 3 },
+    value: 6,
+  },
+
+  
+  {
+    name: 'fifteen eight',
+    hand: [
+      { rank: 7, suit: 2 },
+      { rank: 8, suit: 1 },
+      { rank: 7, suit: 3 },
+      { rank: 8, suit: 0 },
+    ],
+    cut: { rank: 5, suit: 0 },
+    value: 12,
+  },
+  
+  {
+    name: 'fifteen twelve',
+    hand: [
+      { rank: 7, suit: 2 },
+      { rank: 7, suit: 1 },
+      { rank: 7, suit: 3 },
+      { rank: 1, suit: 0 },
+    ],
+    cut: { rank: 1, suit: 1 },
+    value: 20,
+  },
+  
+  {
+    name: 'fifteen sixteen',
+    hand: [
+      { rank: 5, suit: 2 },
+      { rank: 5, suit: 1 },
+      { rank: 5, suit: 3 },
+      { rank: 5, suit: 0 },
+    ],
+    cut: { rank: 10, suit: 1 },
+    value: 28,
+  },
+
+  
+  {
+    name: 'perfect hand',
+    hand: [
+      { rank: 5, suit: 2 },
+      { rank: 11, suit: 1 },
+      { rank: 5, suit: 3 },
+      { rank: 5, suit: 0 },
+    ],
+    cut: { rank: 5, suit: 1 },
+    value: 29,
+  },
 ];
