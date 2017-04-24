@@ -12,7 +12,7 @@ class GetDeal {
 
     let cards = [];
     while( cards.length < size ){
-      const rank = Math.floor(Math.random()*13);
+      const rank = Math.floor(Math.random()*13) + 1;
       const suit = Math.floor(Math.random()*4);
 
       if ( !liveBurned.filter( c => ((c.rank === rank) && (c.suit === suit)) ).length ) {
