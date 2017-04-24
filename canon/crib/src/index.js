@@ -2,14 +2,14 @@ import React from 'react';
 import { render } from 'react-dom';
 import { bootApp, networkMiddleware } from 'tahini';
 
-import App from './App';
+import Game from './Game/';
 import './index.css';
 
 import networkHandlers from './network/';
 
 const RootP = bootApp(
   [ networkMiddleware(networkHandlers) ]
-).getDevice(App, [], App.initState);
+).getDevice(Game, [], Game.initState);
 
 render(
   <RootP/>,
