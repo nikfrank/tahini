@@ -6,7 +6,7 @@ class GetDeal {
   handleRequest( action ){
     // action can define number of cards, list of cards already used
 
-    const { size, burned } = action.network.payload;
+    const { size, burned=[] } = action.network.payload;
 
     let liveBurned = JSON.parse( JSON.stringify( burned ) );
 

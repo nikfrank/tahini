@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 
-import './Round.css';
-
 import Hand from '../pure/Hand';
 import Card from '../pure/Card';
 

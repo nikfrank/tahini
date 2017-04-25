@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 
-import logo from '../logo.svg';
 import './Game.css';
 
 import Round from '../Round/';
@@ -16,7 +15,13 @@ class Game extends Component {
       }),
 
       deal: ()=>({
-        type: 'deal', // network getDeal(12) -> hands
+        network: {
+          handler: 'GetDeal',
+          payload: { size: 12 },
+          nextAction: {
+            type: 'dealHands',
+          },
+        }
       }),
 
       cut: (hands)=>({
@@ -34,6 +39,11 @@ class Game extends Component {
     return {
       nuGame: (subState, action) => subState,
       // .set whatever to new gameState
+
+      dealHands: (subState, { payload: cards }) =>
+        subState
+          .setIn( ['currentHand', 'hands', 0], fromJS( cards.slice(0, 6) ) )
+          .setIn( ['currentHand', 'hands', 1], fromJS( cards.slice(6) ) ),
     };
   }
   
@@ -53,7 +63,6 @@ class Game extends Component {
     return (
       <div className="Game">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React Tahini Cribbage</h2>
         </div>
         <button onClick={this.props.deal}> DEAL! </button>

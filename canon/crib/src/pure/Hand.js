@@ -2,12 +2,16 @@ import React from 'react';
 
 import Card from './Card';
 
-export default ({ cards=[] }) => (
+export default ({ cards=[], onClick }) => (
   <div>
-    <svg width="890" height="400">
+    <svg width="1020" height="300">
       {
         cards.map( (card, i) => (
-          <Card key={i} rank={card.get('rank')} suit={card.get('suit')} offset={200+ i*170} />
+          <Card key={i}
+                onClick={()=> onClick(i)}
+                rank={card.get('rank')}
+                suit={card.get('suit')}
+                offset={i*170} />
         ) )
       }
     </svg>
