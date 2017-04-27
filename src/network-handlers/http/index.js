@@ -48,7 +48,7 @@ class Fetcher {
             
         (response.status !== 200)?
         response.json().then(json=> this.err({status:response.status, body:json})):
-        response.json().then(json=> this.next(json)).catch(e=> this.err({json}))
+        response.json().then(json=> this.next(json)).catch(e=> this.err({err: e, json}))
 
         return 'done';
         
