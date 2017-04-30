@@ -1,18 +1,22 @@
 import React from 'react';
 
-import Card from './Card';
+import Card, { CardBack } from './Card';
 
-export default ({ cards=[], onClick }) => (
-  <div>
-    <svg width="1020" height="300">
+export default ({ cards=[], onClick, hidden }) => (
+  <div className="Hand-Holder">
+    <svg viewBox="0 0 1020 300">
       {
-        cards.map( (card, i) => (
-          <Card key={i}
-                onClick={()=> onClick(i)}
-                rank={card.get('rank')}
-                suit={card.get('suit')}
-                offset={i*170} />
-        ) )
+        cards.map( (card, i) =>
+          hidden ? (
+            <CardBack key={i} offset={i*170} />
+          ) : (
+            <Card key={i}
+                  onClick={()=> onClick(i)}
+                  rank={card.get('rank')}
+                  suit={card.get('suit')}
+                  selected={card.get('selected')}
+                  offset={i*170} />
+          ) )
       }
     </svg>
   </div>

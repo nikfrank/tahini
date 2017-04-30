@@ -10,14 +10,36 @@ class Round extends Component {
   static get actions(){
     return {
       deal: ()=>({
-        type: 'noop',
+        network: {
+          handler: 'GetDeal',
+          payload: { size: 12 },
+          nextAction: {
+            type: 'dealHands',
+          },
+        }
+      }),
+
+      cut: (hands)=>({
+        type: 'cut', // network getDeal(1, hands.flatten)
+      }),
+
+      selectCard: (handIndex, cardIndex) => ({
+        type: 'selectCard',
+        payload: [handIndex, cardIndex],
       }),
     };
   }
 
   static get reducer(){
     return {
-      noop: (subState, action) => subState,
+      dealHands: (subState, { payload: cards }) =>
+        subState
+          .setIn( ['hands', 0], fromJS( cards.slice(0, 6) ) )
+          .setIn( ['hands', 1], fromJS( cards.slice(6) ) ),
+
+      selectCard: (subState, { payload: [hi, ci] }) =>
+        subState
+          .updateIn( ['hands', hi, ci, 'selected'], v => !v ),
     };
   }
   
@@ -25,23 +47,8 @@ class Round extends Component {
     return fromJS({
       index: 0,
       hands: [
-        [
-          { rank: 1, suit: 0 },
-          { rank: 2, suit: 1 },
-          { rank: 3, suit: 2 },
-          { rank: 3, suit: 3 },
-          { rank: 4, suit: 1 },
-          { rank: 5, suit: 2 },
-        ],
-
-        [
-          { rank: 10, suit: 0 },
-          { rank: 10, suit: 1 },
-          { rank: 11, suit: 0 },
-          { rank: 11, suit: 1 },
-          { rank: 12, suit: 0 },
-          { rank: 12, suit: 1 },
-        ],
+        [],
+        [],
       ],
       crib: [],
       cribOwner: 0,
@@ -49,14 +56,21 @@ class Round extends Component {
       cut: {},
     });
   }
+
+  componentWillMount(){
+    this.props.deal();
+  }
   
   render() {
     return (
       <div className="Round">
-        <p>p1</p>
-        <Hand cards={this.props.subState.getIn( ['hands', 0] )} />
-        <p>p2</p>
-        <Hand cards={this.props.subState.getIn( ['hands', 1] )} />
+        <Hand cards={this.props.subState.getIn( ['hands', 0] )}
+              hidden={true}
+              onClick={ci => this.props.selectCard(0, ci)}/>
+        
+        <Hand cards={this.props.subState.getIn( ['hands', 1] )}
+              onClick={ci => this.props.selectCard(1, ci)}/>
+        
         <p>crib</p>
         <Hand cards={this.props.subState.get('crib')} />
         <p>cut</p>
