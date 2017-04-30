@@ -4,18 +4,18 @@ import Card, { CardBack } from './Card';
 
 export default ({ cards=[], onClick, hidden }) => (
   <div className="Hand-Holder">
-    <svg viewBox="0 0 1020 300">
+    <svg viewBox="0 0 1020 320">
       {
         cards.map( (card, i) =>
           hidden ? (
-            <CardBack key={i} offset={i*170} />
+            <CardBack key={i} xOffset={i*100} yOffset={0} />
           ) : (
-            <Card key={i}
+            <Card key={i+''+card.get('rank')+''+card.get('suit')}
                   onClick={()=> onClick(i)}
                   rank={card.get('rank')}
                   suit={card.get('suit')}
-                  selected={card.get('selected')}
-                  offset={i*170} />
+                  xOffset={i * 100}
+                  yOffset={20 * !card.get('selected')} />
           ) )
       }
     </svg>

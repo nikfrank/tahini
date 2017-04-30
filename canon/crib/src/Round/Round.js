@@ -27,6 +27,11 @@ class Round extends Component {
         type: 'selectCard',
         payload: [handIndex, cardIndex],
       }),
+
+      sendToCrib: handIndex => ({
+        type: 'sendToCrib',
+        payload: handIndex,
+      }),
     };
   }
 
@@ -34,12 +39,26 @@ class Round extends Component {
     return {
       dealHands: (subState, { payload: cards }) =>
         subState
+          .set('crib', fromJS( [] ) )
           .setIn( ['hands', 0], fromJS( cards.slice(0, 6) ) )
           .setIn( ['hands', 1], fromJS( cards.slice(6) ) ),
 
       selectCard: (subState, { payload: [hi, ci] }) =>
         subState
           .updateIn( ['hands', hi, ci, 'selected'], v => !v ),
+
+      sendToCrib: (subState, { payload: hi }) => {
+        const keep = subState.getIn( ['hands', hi] )
+                             .filter( c => !c.get('selected') );
+
+        const toss = subState.getIn( ['hands', hi] )
+                             .filter( c => c.get('selected') );
+        return (
+          keep.size !== 4
+        ) ? subState : subState
+          .update('crib', crib => crib.concat( toss ) )
+          .setIn( ['hands', hi], keep );
+      },
     };
   }
   
@@ -72,6 +91,9 @@ class Round extends Component {
               onClick={ci => this.props.selectCard(1, ci)}/>
         
         <p>crib</p>
+        <button onClick={()=> this.props.sendToCrib(1)}>
+          Send cards to crib
+        </button>
         <Hand cards={this.props.subState.get('crib')} />
         <p>cut</p>
         <Card card={this.props.subState.get('cut')}/>

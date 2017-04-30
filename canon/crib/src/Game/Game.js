@@ -18,6 +18,10 @@ class Game extends Component {
         type: 'trackScoringEvent',
         payload: e,
       }),
+
+      nextHand: ()=>({
+        type: 'nextHand',
+      }),
     };
   }
 
@@ -25,6 +29,8 @@ class Game extends Component {
     return {
       nuGame: (subState, action) => subState,
       // .set whatever to new gameState
+
+      nextHand: (subState, action) => subState.update('handIndex', i => i+1),
     };
   }
   
@@ -48,10 +54,13 @@ class Game extends Component {
     return (
       <div className="Game">
         <div className="App-header">
-          <h2>Welcome to React Tahini Cribbage</h2>
+          <h2>
+            Welcome to React Tahini Cribbage
+            <button onClick={this.props.nextHand}>NEXT</button>
+          </h2>
         </div>
         
-        <CurrentHand key={this.props.subState.handIndex} />
+        <CurrentHand key={this.props.subState.get('handIndex')} />
       </div>
     );
   }
