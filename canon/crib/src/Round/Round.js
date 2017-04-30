@@ -32,6 +32,17 @@ class Round extends Component {
         type: 'sendToCrib',
         payload: handIndex,
       }),
+
+      computerSendToCrib: (hand, isCpCrib)=>({
+        network: {
+          handler: 'cpChooseCribCards',
+          payload: { hand, isCpCrib },
+
+          nextAction: {
+            type: 'execCpSendToCrib',
+          },
+        },
+      }),
     };
   }
 
@@ -59,6 +70,12 @@ class Round extends Component {
           .update('crib', crib => crib.concat( toss ) )
           .setIn( ['hands', hi], keep );
       },
+
+
+      // check that this is still the correct hand
+      // move the cards to the crib
+      execCpSendToCrib: (subState, { payload: cpHand }) =>
+        subState,
     };
   }
   
@@ -79,6 +96,11 @@ class Round extends Component {
   componentWillMount(){
     this.props.deal();
   }
+
+  sendToCrib = ()=>{
+    this.props.sendToCrib(1);
+    this.props.computerSendToCrib();
+  }
   
   render() {
     return (
@@ -91,7 +113,7 @@ class Round extends Component {
               onClick={ci => this.props.selectCard(1, ci)}/>
         
         <p>crib</p>
-        <button onClick={()=> this.props.sendToCrib(1)}>
+        <button onClick={this.sendToCrib}>
           Send cards to crib
         </button>
         <Hand cards={this.props.subState.get('crib')} />
