@@ -30,7 +30,6 @@ class Game extends Component {
       nuGame: (subState, action) => subState,
       // .set whatever to new gameState
 
-      nextHand: (subState, action) => subState.update('handIndex', i => i+1),
     };
   }
   
@@ -38,7 +37,6 @@ class Game extends Component {
     return fromJS({
       mode: '1p-cp',
       scoring: [],
-      handIndex: 0,
     });
   }
 
@@ -56,12 +54,10 @@ class Game extends Component {
         <div className="App-header">
           <h2>
             Welcome to React Tahini Cribbage
-            <button onClick={this.props.nextHand}>NEXT</button>
           </h2>
         </div>
         
-        <CurrentHand key={this.props.subState.get('handIndex')}
-                     handIndex={this.props.subState.get('handIndex')}
+        <CurrentHand onScoringEvent={this.props.trackScoringEvent}
                      scoring={this.props.subState.get('scoring')}/>
       </div>
     );

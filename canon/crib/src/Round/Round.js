@@ -9,6 +9,10 @@ import score from '../util/score';
 class Round extends Component {
   static get actions(){
     return {
+      next: ()=>({
+        type: 'next',
+      }),
+
       deal: ()=>({
         network: {
           handler: 'GetDeal',
@@ -57,6 +61,13 @@ class Round extends Component {
 
   static get reducer(){
     return {
+      next: (subState, action) =>
+        subState.set( 'hands', fromJS([[],[]]) )
+                .set('crib', fromJS([]) )
+                .update('cribOwner', po => (po + 1)%2 )
+                .set('pegging', fromJS([]) )
+                .set('cut', fromJS({}) ),
+      
       dealHands: (subState, { payload: cards }) =>
         subState
           .set('crib', fromJS( [] ) )
@@ -96,7 +107,6 @@ class Round extends Component {
   
   static get initState(){
     return fromJS({
-      index: 0,
       hands: [
         [],
         [],
@@ -132,12 +142,17 @@ class Round extends Component {
           .concat(this.props.subState.getIn( ['hands', 1] ).toJS())
     );
   }
+
+  nextHand = ()=>{
+    this.props.next();
+    this.props.deal();
+  }
   
   render() {
     return (
       <div className="Round">
         <Hand cards={this.props.subState.getIn( ['hands', 0] )}
-              hidden={true}
+              hidden={ !this.props.subState.getIn( ['cut', 'rank'] )}
               onClick={ci => this.props.selectCard(0, ci)}/>
         
         <Hand cards={this.props.subState.getIn( ['hands', 1] )}
@@ -147,7 +162,9 @@ class Round extends Component {
         <button onClick={this.sendToCrib}>
           Send cards to crib
         </button>
-        <Hand cards={this.props.subState.get('crib')} />
+        <Hand cards={this.props.subState.get('crib')}
+              hidden={ !this.props.subState.getIn( ['cut', 'rank'] )} />
+        
         <button onClick={this.cut}>cut</button>
         <Hand cards={[this.props.subState.get('cut')]}/>
         {
@@ -170,12 +187,13 @@ class Round extends Component {
               <p>
                 {
                   score( this.props.subState.get( 'crib' ).toJS().concat(
-                         this.props.subState.get('cut').toJS() ) )
+                    this.props.subState.get('cut').toJS() ) )
                 }
               </p>
             </div>
           )
         }
+        <button onClick={this.nextHand}>NEXT</button>
       </div>
     );
   }
