@@ -42,6 +42,7 @@ export default (hand, cut = {}) => {
     '1010': 12,
   }[runPattern] || 0;
 
+  // this filter is for crib scoring, which needs a test case
   const ranks = cards.map( c => Math.min(10, c.rank) ).filter( r => !isNaN(r));
 
   const fifteenPts =

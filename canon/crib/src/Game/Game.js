@@ -61,6 +61,7 @@ class Game extends Component {
         </div>
         
         <CurrentHand key={this.props.subState.get('handIndex')}
+                     handIndex={this.props.subState.get('handIndex')}
                      scoring={this.props.subState.get('scoring')}/>
       </div>
     );

@@ -124,7 +124,8 @@ class Round extends Component {
 
 
   cut = ()=>{
-    if ( this.props.subState.get('crib').size !== 4 ) return;
+    if (( this.props.subState.get('crib').size !== 4 )
+      || ( this.props.subState.getIn( ['cut', 'rank'] ) )) return;
     else this.props.cut(
       this.props.subState.get('crib').toJS()
           .concat(this.props.subState.getIn( ['hands', 0] ).toJS())
@@ -136,7 +137,7 @@ class Round extends Component {
     return (
       <div className="Round">
         <Hand cards={this.props.subState.getIn( ['hands', 0] )}
-              hidden={false}
+              hidden={true}
               onClick={ci => this.props.selectCard(0, ci)}/>
         
         <Hand cards={this.props.subState.getIn( ['hands', 1] )}
