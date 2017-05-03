@@ -149,6 +149,32 @@ class Round extends Component {
         <Hand cards={this.props.subState.get('crib')} />
         <button onClick={this.cut}>cut</button>
         <Hand cards={[this.props.subState.get('cut')]}/>
+        {
+          !this.props.subState.getIn( ['cut', 'rank'] ) ? null :
+          (
+            <div>
+              <p>
+                {
+                  score( this.props.subState.getIn( ['hands', 0] ).toJS(),
+                         this.props.subState.get('cut').toJS() )
+                }
+              </p>
+              <p>
+                {
+                  score( this.props.subState.getIn( ['hands', 1] ).toJS(),
+                         this.props.subState.get('cut').toJS() )
+                }
+
+              </p>
+              <p>
+                {
+                  score( this.props.subState.get( 'crib' ).toJS().concat(
+                         this.props.subState.get('cut').toJS() ) )
+                }
+              </p>
+            </div>
+          )
+        }
       </div>
     );
   }

@@ -42,7 +42,7 @@ export default (hand, cut = {}) => {
     '1010': 12,
   }[runPattern] || 0;
 
-  const ranks = cards.map( c => Math.min(10, c.rank) );
+  const ranks = cards.map( c => Math.min(10, c.rank) ).filter( r => !isNaN(r));
 
   const fifteenPts =
     Array( Math.pow(2, ranks.length) - 1)
