@@ -19,8 +19,17 @@ class Round extends Component {
         }
       }),
 
-      cut: (hands)=>({
-        type: 'cut', // network getDeal(1, hands.flatten)
+      cut: (cards)=>({
+        network: {
+          handler: 'GetDeal',
+          payload: {
+            size: 1,
+            burned: cards,
+          },
+          nextAction: {
+            type: 'setCut',
+          },
+        },
       }),
 
       selectCard: (handIndex, cardIndex) => ({
@@ -33,10 +42,10 @@ class Round extends Component {
         payload: handIndex,
       }),
 
-      computerSendToCrib: (hand, isCpCrib)=>({
+      computerSendToCrib: (hand, isCpCrib, target)=>({
         network: {
           handler: 'cpChooseCribCards',
-          payload: { hand, isCpCrib },
+          payload: { hand, isCpCrib, target },
 
           nextAction: {
             type: 'execCpSendToCrib',
@@ -67,15 +76,21 @@ class Round extends Component {
         return (
           keep.size !== 4
         ) ? subState : subState
-          .update('crib', crib => crib.concat( toss ) )
+          .update('crib', crib => crib.concat(
+            toss.map( c => c.set('selected', false)) ) )
+        
           .setIn( ['hands', hi], keep );
       },
 
 
       // check that this is still the correct hand
-      // move the cards to the crib
-      execCpSendToCrib: (subState, { payload: cpHand }) =>
-        subState,
+      execCpSendToCrib: (subState, { payload: { hand, crib } }) =>
+        subState.update('crib', pcrib => pcrib.concat( crib ) )
+                .setIn( ['hands', 0], hand ),
+
+
+      setCut: (subState, { payload: [cut] }) =>
+        subState.set('cut', fromJS(cut) ),
     };
   }
   
@@ -99,14 +114,29 @@ class Round extends Component {
 
   sendToCrib = ()=>{
     this.props.sendToCrib(1);
-    this.props.computerSendToCrib();
+    this.props.computerSendToCrib(
+      this.props.subState.getIn( ['hands', 0] ),
+      this.props.subState.get('cribOwner') === 0,
+      121 - this.props.scoring.filter(se => se.player === 1)
+                .reduce((p, c)=> (p + c.pts), 0)
+    );
+  }
+
+
+  cut = ()=>{
+    if ( this.props.subState.get('crib').size !== 4 ) return;
+    else this.props.cut(
+      this.props.subState.get('crib').toJS()
+          .concat(this.props.subState.getIn( ['hands', 0] ).toJS())
+          .concat(this.props.subState.getIn( ['hands', 1] ).toJS())
+    );
   }
   
   render() {
     return (
       <div className="Round">
         <Hand cards={this.props.subState.getIn( ['hands', 0] )}
-              hidden={true}
+              hidden={false}
               onClick={ci => this.props.selectCard(0, ci)}/>
         
         <Hand cards={this.props.subState.getIn( ['hands', 1] )}
@@ -117,8 +147,8 @@ class Round extends Component {
           Send cards to crib
         </button>
         <Hand cards={this.props.subState.get('crib')} />
-        <p>cut</p>
-        <Card card={this.props.subState.get('cut')}/>
+        <button onClick={this.cut}>cut</button>
+        <Hand cards={[this.props.subState.get('cut')]}/>
       </div>
     );
   }

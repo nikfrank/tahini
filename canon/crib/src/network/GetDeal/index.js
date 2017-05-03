@@ -1,6 +1,7 @@
 class GetDeal {
-  constructor(next){
+  constructor(next, done){
     this.next = next;
+    this.done = done;
   }
 
   handleRequest( action ){
@@ -22,6 +23,7 @@ class GetDeal {
     }
     
     this.next({ payload: cards });
+    this.done();
   }
 }
 
