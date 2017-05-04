@@ -122,6 +122,48 @@ class Round extends Component {
     this.props.deal();
   }
 
+  componentWillReceiveProps(nuProps){
+    const nuCut = nuProps.subState.get('cut').toJS();
+    const oldCut = this.props.subState.get('cut').toJS();
+
+    if(!oldCut.rank && nuCut.rank){
+      // just did the cut
+      // put in the pegging round      
+
+      const cribOwner = this.props.subState.get('cribOwner');
+      const nonCrib = (1 + this.props.subState.get('cribOwner')) % 2;
+      
+      if ( nuCut.rank === 11 ) {
+        this.props.onScoringEvent({
+          player: cribOwner,
+          type: 'crib dibs',
+          pts: 2,
+        });        
+      }
+      
+      this.props.onScoringEvent({
+        player: nonCrib,
+        type: 'nonCrib hand',
+        pts: score( this.props.subState.getIn( ['hands', nonCrib] ).toJS(),
+                    nuCut),
+      });
+
+      this.props.onScoringEvent({
+        player: cribOwner,
+        type: 'cribOwner hand',
+        pts: score( this.props.subState.getIn( ['hands', cribOwner] ).toJS(),
+                    nuCut),
+      });
+
+      this.props.onScoringEvent({
+        player: cribOwner,
+        type: 'crib',
+        pts: score( this.props.subState.get( 'crib' ).toJS().concat( nuCut ) ),
+      });
+      
+    }
+  }
+  
   sendToCrib = ()=>{
     this.props.sendToCrib(1);
     this.props.computerSendToCrib(
@@ -158,7 +200,12 @@ class Round extends Component {
         <Hand cards={this.props.subState.getIn( ['hands', 1] )}
               onClick={ci => this.props.selectCard(1, ci)}/>
         
-        <p>crib</p>
+        <p>
+          {
+            ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
+          }
+          crib
+        </p>
         <button onClick={this.sendToCrib}>
           Send cards to crib
         </button>

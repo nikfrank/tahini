@@ -30,6 +30,8 @@ class Game extends Component {
       nuGame: (subState, action) => subState,
       // .set whatever to new gameState
 
+      trackScoringEvent: (subState, { payload: e }) =>
+        subState.update('scoring', sc => sc.push(e) ),
     };
   }
   
@@ -48,17 +50,29 @@ class Game extends Component {
   
   render() {
     const { CurrentHand } = this;
-    
+
     return (
       <div className="Game">
-        <div className="App-header">
-          <h2>
-            Welcome to React Tahini Cribbage
-          </h2>
-        </div>
         
         <CurrentHand onScoringEvent={this.props.trackScoringEvent}
                      scoring={this.props.subState.get('scoring')}/>
+
+        <p>
+          my pts:
+          {
+            this.props.subState.get('scoring').toJS()
+                .filter(se => se.player === 1)
+                .reduce((p, c)=> (p + c.pts), 0)
+          }
+        </p>
+        <p>
+          cp pts:
+          {
+            this.props.subState.get('scoring').toJS()
+                .filter(se => se.player === 0)
+                .reduce((p, c)=> (p + c.pts), 0)
+          }
+        </p>
       </div>
     );
   }
