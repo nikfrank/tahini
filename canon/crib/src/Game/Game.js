@@ -53,9 +53,6 @@ class Game extends Component {
 
     return (
       <div className="Game">
-        
-        <CurrentHand onScoringEvent={this.props.trackScoringEvent}
-                     scoring={this.props.subState.get('scoring')}/>
 
         <p>
           my pts:
@@ -64,8 +61,7 @@ class Game extends Component {
                 .filter(se => se.player === 1)
                 .reduce((p, c)=> (p + c.pts), 0)
           }
-        </p>
-        <p>
+          {'   '}
           cp pts:
           {
             this.props.subState.get('scoring').toJS()
@@ -73,6 +69,12 @@ class Game extends Component {
                 .reduce((p, c)=> (p + c.pts), 0)
           }
         </p>
+
+        <div style={{position:'relative'}}>
+          <CurrentHand onScoringEvent={this.props.trackScoringEvent}
+                       scoring={this.props.subState.get('scoring')}/>
+        </div>
+
       </div>
     );
   }

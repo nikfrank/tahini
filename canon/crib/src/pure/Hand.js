@@ -8,13 +8,13 @@ export default ({ cards=[], onClick, hidden }) => (
       {
         cards.map( (card, i) =>
           hidden ? (
-            <CardBack key={i} xOffset={i*100} yOffset={0} />
+            <CardBack key={i} xOffset={i*80} yOffset={0} />
           ) : (
             <Card key={i+''+card.get('rank')+''+card.get('suit')}
                   onClick={()=> onClick(i)}
                   rank={card.get('rank')}
                   suit={card.get('suit')}
-                  xOffset={i * 100}
+                  xOffset={i * 80}
                   yOffset={20 * !card.get('selected')} />
           ) )
       }

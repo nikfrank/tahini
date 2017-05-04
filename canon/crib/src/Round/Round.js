@@ -4,7 +4,11 @@ import { fromJS } from 'immutable';
 import Hand from '../pure/Hand';
 import Card from '../pure/Card';
 
+import Pegging from '../Pegging';
+
 import score from '../util/score';
+
+import './Round.css';
 
 class Round extends Component {
   static get actions(){
@@ -46,6 +50,14 @@ class Round extends Component {
         payload: handIndex,
       }),
 
+      startPegging: ()=>({
+        type: 'startPegging',
+      }),
+      
+      endPegging: ()=>({
+        type: 'endPegging',
+      }),
+      
       computerSendToCrib: (hand, isCpCrib, target)=>({
         network: {
           handler: 'cpChooseCribCards',
@@ -65,7 +77,6 @@ class Round extends Component {
         subState.set( 'hands', fromJS([[],[]]) )
                 .set('crib', fromJS([]) )
                 .update('cribOwner', po => (po + 1)%2 )
-                .set('pegging', fromJS([]) )
                 .set('cut', fromJS({}) ),
       
       dealHands: (subState, { payload: cards }) =>
@@ -93,6 +104,8 @@ class Round extends Component {
           .setIn( ['hands', hi], keep );
       },
 
+      startPegging: (subState, action) => subState.set('isPeggingPhase', true),
+      endPegging: (subState, action) => subState.set('isPeggingPhase', false),
 
       // check that this is still the correct hand
       execCpSendToCrib: (subState, { payload: { hand, crib } }) =>
@@ -112,8 +125,8 @@ class Round extends Component {
         [],
       ],
       crib: [],
-      cribOwner: 0,
-      pegging: [],
+      isPeggingPhase: false,
+      cribOwner: (Date.now() % 2),
       cut: {},
     });
   }
@@ -128,7 +141,6 @@ class Round extends Component {
 
     if(!oldCut.rank && nuCut.rank){
       // just did the cut
-      // put in the pegging round      
 
       const cribOwner = this.props.subState.get('cribOwner');
       const nonCrib = (1 + this.props.subState.get('cribOwner')) % 2;
@@ -140,7 +152,11 @@ class Round extends Component {
           pts: 2,
         });        
       }
-      
+
+      // put in the pegging round
+      this.props.startPegging();
+
+      // then after it is over
       this.props.onScoringEvent({
         player: nonCrib,
         type: 'nonCrib hand',
@@ -177,7 +193,7 @@ class Round extends Component {
 
   cut = ()=>{
     if (( this.props.subState.get('crib').size !== 4 )
-      || ( this.props.subState.getIn( ['cut', 'rank'] ) )) return;
+        || ( this.props.subState.getIn( ['cut', 'rank'] ) )) return;
     else this.props.cut(
       this.props.subState.get('crib').toJS()
           .concat(this.props.subState.getIn( ['hands', 0] ).toJS())
@@ -191,56 +207,96 @@ class Round extends Component {
   }
   
   render() {
+    const showCut = (this.props.subState.get('crib').size === 4) &&
+                    (!this.props.subState.getIn(['cut', 'rank']));
+
+    const showSend = (this.props.subState.get('crib').size !== 4);
+
+    const firstToPlay = (1 + this.props.subState.get('cribOwner')) % 2;
+
+    const showPegging = this.props.subState.get('isPeggingPhase');
+    
     return (
       <div className="Round">
-        <Hand cards={this.props.subState.getIn( ['hands', 0] )}
-              hidden={ !this.props.subState.getIn( ['cut', 'rank'] )}
-              onClick={ci => this.props.selectCard(0, ci)}/>
         
-        <Hand cards={this.props.subState.getIn( ['hands', 1] )}
-              onClick={ci => this.props.selectCard(1, ci)}/>
-        
-        <p>
-          {
-            ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
-          }
-          crib
-        </p>
-        <button onClick={this.sendToCrib}>
-          Send cards to crib
-        </button>
-        <Hand cards={this.props.subState.get('crib')}
-              hidden={ !this.props.subState.getIn( ['cut', 'rank'] )} />
-        
-        <button onClick={this.cut}>cut</button>
-        <Hand cards={[this.props.subState.get('cut')]}/>
-        {
-          !this.props.subState.getIn( ['cut', 'rank'] ) ? null :
-          (
-            <div>
-              <p>
-                {
-                  score( this.props.subState.getIn( ['hands', 0] ).toJS(),
-                         this.props.subState.get('cut').toJS() )
-                }
-              </p>
-              <p>
-                {
-                  score( this.props.subState.getIn( ['hands', 1] ).toJS(),
-                         this.props.subState.get('cut').toJS() )
-                }
+        <div className="left">
+          <Hand cards={this.props.subState.getIn( ['hands', 0] )}
+                hidden={ !this.props.subState.getIn( ['cut', 'rank'] )}
+                onClick={ci => this.props.selectCard(0, ci)}/>
 
-              </p>
-              <p>
-                {
-                  score( this.props.subState.get( 'crib' ).toJS().concat(
-                    this.props.subState.get('cut').toJS() ) )
-                }
-              </p>
-            </div>
-          )
-        }
-        <button onClick={this.nextHand}>NEXT</button>
+          {
+            showPegging ?
+            <Pegging hands={this.props.subState.get('hands')}
+                     onScoringEvent={this.props.onScoringEvent}
+                     onComplete={this.props.endPegging}
+                     firstToPlay={firstToPlay} /> : null
+          }
+
+          <Hand cards={this.props.subState.getIn( ['hands', 1] )}
+                onClick={ci => this.props.selectCard(1, ci)}/>
+
+        </div>
+
+        
+        <div className="right">
+
+          <div className="cut">
+            {
+              showCut ?
+              (<button onClick={this.cut}>cut</button>) : null
+            }
+            <Hand cards={[this.props.subState.get('cut')]}/>
+          </div>
+
+          <p>
+            {
+              ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
+            }
+            crib
+          </p>
+
+          {
+            showSend ?
+            (<button onClick={this.sendToCrib}>
+              Send cards to crib
+            </button>) : null
+          }
+          <Hand cards={this.props.subState.get('crib')}
+                hidden={ !this.props.subState.getIn( ['cut', 'rank'] )} />
+
+          {
+            !this.props.subState.getIn( ['cut', 'rank'] ) ? null :
+            (
+              <div>
+                <p>
+                  Computer's hand:
+                  {
+                    score( this.props.subState.getIn( ['hands', 0] ).toJS(),
+                           this.props.subState.get('cut').toJS() )
+                  }
+                  pts
+                </p>
+                <p>
+                  My hand:
+                  {
+                    score( this.props.subState.getIn( ['hands', 1] ).toJS(),
+                           this.props.subState.get('cut').toJS() )
+                  }
+                  pts
+                </p>
+                <p>
+                  Crib:
+                  {
+                    score( this.props.subState.get( 'crib' ).toJS().concat(
+                      this.props.subState.get('cut').toJS() ) )
+                  }
+                  pts
+                </p>
+                <button onClick={this.nextHand}>Deal</button>
+              </div>
+            )
+          }
+        </div>
       </div>
     );
   }
