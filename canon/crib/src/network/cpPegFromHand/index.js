@@ -7,7 +7,7 @@ class cpPegFromHand {
 
   handleRequest( action ){
     const { hand, played } = action.network.payload;
-
+console.log(hand, played);
     // check if each card would create points if played
     //  if any, choose the highest
 

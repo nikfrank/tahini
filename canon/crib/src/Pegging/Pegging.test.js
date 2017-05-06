@@ -39,9 +39,10 @@ it('plays a card nu', ()=>{
   //   expect the cards to be moved to the crib
 
   const xS = Pegging.initState
-                  .setIn( [ 'hands', 1 ],
-                          fromJS( hand.slice(1) ) )
-                  .set( 'played', fromJS( [{ card: hand[0], player: 1}] ) );
+                    .setIn( [ 'hands', 1 ],
+                            fromJS( hand.slice(1) ) )
+                    .set( 'nextToPlay', 0)
+                    .set( 'played', fromJS( [{ card: hand[0], player: 1}] ) );
 
   expect( nS ).toEqual( xS );
   
