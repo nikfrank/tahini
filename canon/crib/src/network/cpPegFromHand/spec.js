@@ -1,4 +1,4 @@
-import GetDeal from './';
+import cpChooseCribCards from './';
 
 import { networkHandlers } from 'tahini';
 
@@ -8,13 +8,12 @@ it('tests the request pattern', ()=>{
   // should write some cases for this (size, burns)
   
   const next = jest.fn();
-  const done = jest.fn();
   
-  const dealer = new GetDeal(next, done);
+  const dealer = new cpChooseCribCards(next);
     
   const action = {
     network:{
-      handler:'GetDeal',
+      handler:'cpChooseCribCards',
       payload: { size: 5, burned: [] },
     },
   };

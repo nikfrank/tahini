@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Game from './Game';
+
+import { Base } from 'tahini';
 
 const { it } = global;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<App subState={ App.initState }/>, div);
+  ReactDOM.render(<Game subState={ Game.initState }
+                        getDevice={ jest.fn().mockReturnValue(Base) }/>, div);
 });

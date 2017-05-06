@@ -7,9 +7,9 @@ import score from './score';
 
 // for each case, commit and push (for article)
 
-import cases from './cases';
+import hands from './hands';
 
-cases.forEach(({ hand, cut, value, name }) =>
+hands.forEach(({ hand, cut, value, name }) =>
   it(`scores: ${name}`, ()=>{
     expect( score(hand, cut) ).toEqual( value );
   })

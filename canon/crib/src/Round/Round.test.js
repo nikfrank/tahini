@@ -10,6 +10,7 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render( (
     <Round subState={ Round.initState }
+           setCribOwner={jest.fn()}
            deal={jest.fn()}/>
   ), div);
 
@@ -40,7 +41,10 @@ it('selects cards for the crib', ()=>{
   const xS = Round.initState
                   .setIn( [ 'hands', 0 ],
                           fromJS( hand.filter( c => !c.selected ) ) )
-                  .set( 'crib', fromJS( hand.filter( c => c.selected ) ) );
+                  .set( 'crib', fromJS(
+                    hand.filter( c => c.selected )
+                        .map( c => ({ ...c, selected:false }))
+                  ) );
 
   expect( nS ).toEqual( xS );
   
