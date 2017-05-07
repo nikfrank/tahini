@@ -31,16 +31,24 @@ class Pegging extends Component {
   static get reducer(){
     return {
       playCard: (subState, { payload: [hi, ci] }) =>
-        (subState.get('nextToPlay') !== hi) ? subState :
-        subState
-          .update('played', pl =>
-            pl.push( fromJS({
-              card: subState.getIn( ['hands', hi, ci] ),
-              player: hi,
-            })))
-          .updateIn(['hands', hi],
-                    hand => hand.slice(0, ci).concat( hand.slice(ci+1) ))
-          .set('nextToPlay', (hi + 1)%2),
+        (
+          subState.get('nextToPlay') !== hi
+        ) ? subState : (
+          
+          ci === null
+        ) ? subState.update('played', pl =>
+          pl.push( fromJS({ card: {}, player: hi }))
+        ).set('nextToPlay', (hi + 1)%2) : (
+          
+          subState
+            .update('played', pl =>
+              pl.push( fromJS({
+                card: subState.getIn( ['hands', hi, ci] ),
+                player: hi,
+              })))
+            .updateIn(['hands', hi],
+                      hand => hand.slice(0, ci).concat( hand.slice(ci+1) ))
+            .set('nextToPlay', (hi + 1)%2) ),
     };
   }
   
@@ -72,23 +80,34 @@ class Pegging extends Component {
 
     const { score, player, count, stack } = pegScore( played.toJS() );
 
-    // pull out cards on current stack
-
-    console.log(score, player, count, stack);
     // if there are no cards in nextToPlay's hand send {}
+    const passes = stack.reduce( (p, c) => (c.card.rank? 0 : p+1) , 0);
     
+    if ( score )
+      this.props.onScoringEvent({ player, type: 'peg', pts: score });
+    
+    // if all the cards are played, onComplete
+    if ( nuProps.subState.getIn(['hands', 0]).size +
+         nuProps.subState.getIn(['hands', 1]).size === 0) {
+      setTimeout(()=> {
+        if( count !== 31 ) this.props.onScoringEvent({ player, type: 'peg', pts: 1 })
+        this.props.onComplete();
+      }, 5000);
+
+      // have to pass
+    } else if (( nuProps.subState.get('nextToPlay') === 1 ) &&
+               ( passes < 2 ) &&
+               ( !nuProps.subState.getIn(['hands', 1])
+                         .filter( c => ( c.get('rank') + count <= 31 ) ).size ) )
+      this.props.playCard(null);
     
     // if nextToPlay is 0 trigger computer play
-    if (nuProps.subState.get('nextToPlay') === 0)
-      this.props.cpPegFromHand(
-        nuProps.subState.getIn(['hands', 0]).toJS(),
-        nuProps.subState.get('played').toJS()
-      );
-
-    // if all the cards are played, onComplete
-    else if ( this.props.subState.getIn(['hands', 0]).size +
-              this.props.subState.getIn(['hands', 1]).size === 0)
-      this.props.onComplete();
+    else if ( nuProps.subState.get('nextToPlay') === 0 )
+      setTimeout(() =>
+        this.props.cpPegFromHand(
+          nuProps.subState.getIn(['hands', 0]).toJS(),
+          nuProps.subState.get('played').toJS()
+        ), 500);
   }
 
   

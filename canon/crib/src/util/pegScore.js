@@ -1,3 +1,14 @@
+export const runPtsPerStack = stack => {
+  for ( let i = stack.length; i>2; i--)
+    if ( stack.slice(-i)
+              .map( c => c.card.rank )
+              .sort()
+              .reduce( (p, c, i, a) => ( p && ( (!i) || ( c - a[i-1] === 1)) ), true) )
+      return i;
+
+  return 0;
+};
+
 export default (played) => {
   const { count, stack } = played.reduce( (p, c, {
     m: m = Math.min(10, c.card.rank||0)
@@ -21,6 +32,7 @@ export default (played) => {
   for (let i=stack.length; i-->0;) {
     if ( !('rank' in lastCard.card) ) break;
     else if ( stack[i].card.rank === lastCard.card.rank ) pairLength++;
+    else if ( !('rank' in stack[i].card) ) {}
     else break;
   }
   
@@ -31,24 +43,14 @@ export default (played) => {
   
   // if last N cards are consecutive onScoringEvent( lastPlayer, N )
 
-  let runPts = 0;
-
-  for ( let i = stack.length; i>2; i--){
-    if ( stack.slice(-i)
-              .map( c => c.card.rank )
-              .sort()
-              .reduce( (p, c, i, a) => ( p && ( (!i) || ( c - a[i-1] === 1)) ), true) ){
-      runPts = i;
-      break;
-    }
-  }
-
+  const runPts = runPtsPerStack(stack);
+  
   // if count === 31 onScoringEvent( lastPlayer, 2 )
-  const thirtyOnePts = (count === 31) ? 2 : 0;
+  const thirtyOnePts = ( (count === 31) && (lastCard.card.rank)) ? 2 : 0;
   
   // if both players passed, the later one gets the point
   const secondLastCard = stack[stack.length-2];
-  const goPts = (!lastCard || !secondLastCard) ? 0 :
+  const goPts = (!lastCard || !secondLastCard || count === 31) ? 0 :
                 1*( !('rank' in lastCard.card || 'rank' in secondLastCard.card ) );
 
   const score = pairPts + fifteenPts + runPts + thirtyOnePts + goPts;

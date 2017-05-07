@@ -26,6 +26,23 @@ export default [
   {
     played: [
       { card: { rank: 3, suit: 0 }, player: 0},
+      { card: { }, player: 1},
+      { card: { rank: 3, suit: 1 }, player: 0},
+    ],
+    stack: [
+      { card: { rank: 3, suit: 0 }, player: 0},
+      { card: { }, player: 1},
+      { card: { rank: 3, suit: 1 }, player: 0},
+    ],
+    score: 2,
+    player: 0,
+    count: 6,
+    name: 'my pair',
+  },
+  
+  {
+    played: [
+      { card: { rank: 3, suit: 0 }, player: 0},
       { card: { rank: 3, suit: 1 }, player: 1},
       { card: { rank: 3, suit: 2 }, player: 0},
     ],

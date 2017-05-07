@@ -8,8 +8,9 @@ it('tests the request pattern', ()=>{
   // should write some cases for this (size, burns)
   
   const next = jest.fn();
+  const done = jest.fn();
   
-  const dealer = new cpChooseCribCards(next);
+  const dealer = new cpChooseCribCards(next, done);
     
   const action = {
     network:{

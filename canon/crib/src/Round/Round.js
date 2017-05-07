@@ -184,6 +184,8 @@ class Round extends Component {
         type: 'crib',
         pts: score( this.props.subState.get( 'crib' ).toJS().concat( nuCut ) ),
       });
+
+      this.props.setPhase('post-score');
     }
   }
   
@@ -225,7 +227,7 @@ class Round extends Component {
     const showSend = (this.props.subState.get('crib').size !== 4);
 
     const showPegging = this.props.subState.get('phase') === 'peg';
-    const showHands = this.props.subState.get('phase') === 'score';
+    const showHands = this.props.subState.get('phase') === 'post-score';
 
     const PeggingDevice = this.Pegging;
     
