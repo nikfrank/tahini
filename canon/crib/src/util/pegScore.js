@@ -40,7 +40,7 @@ export default (played) => {
   const pairPts = (pairLength - 1) * pairLength;
   
   // if count is 15, onScoringEvent( lastPlayer, 2 )
-  const fifteenPts = (count === 15) ? 2 : 0;
+  const fifteenPts = ((lastCard||{}).card||{}).rank ? ((count === 15) ? 2 : 0) : 0;
   
   // if last N cards are consecutive onScoringEvent( lastPlayer, N )
 
