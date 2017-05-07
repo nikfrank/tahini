@@ -7,6 +7,10 @@ import Card from '../pure/Card';
 import pegScore from '../util/pegScore';
 
 class Pegging extends Component {
+  static get namespace(){
+    return 'crib-Pegging';
+  }
+  
   static get actions(){
     return {
 

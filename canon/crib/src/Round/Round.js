@@ -11,6 +11,10 @@ import score from '../util/score';
 import './Round.css';
 
 class Round extends Component {
+  static get namespace(){
+    return 'crib-Round';
+  }
+
   static get actions(){
     return {
       next: ()=>({

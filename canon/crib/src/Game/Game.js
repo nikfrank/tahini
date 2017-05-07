@@ -8,6 +8,10 @@ import Round from '../Round/';
 import score from '../util/score';
 
 class Game extends Component {
+  static get namespace(){
+    return 'crib-Game';
+  }
+  
   static get actions(){
     return {
       nuGame: ()=>({
