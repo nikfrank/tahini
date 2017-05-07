@@ -30,6 +30,8 @@ class Game extends Component {
       nuGame: (subState, action) => subState,
       // .set whatever to new gameState
 
+// if one player has >120, set game to HEwon, don't change score further
+      
       trackScoringEvent: (subState, { payload: e }) =>
         subState.update('scoring', sc => sc.push(e) ),
     };

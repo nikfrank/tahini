@@ -1,10 +1,11 @@
 export const runPtsPerStack = stack => {
   for ( let i = stack.length; i>2; i--)
-    if ( stack.slice(-i)
+    if ( stack.filter(c => c.card.rank)
+              .slice(-i)
               .map( c => c.card.rank )
               .sort()
               .reduce( (p, c, i, a) => ( p && ( (!i) || ( c - a[i-1] === 1)) ), true) )
-      return i;
+      return stack.filter(c => c.card.rank).length;
 
   return 0;
 };
@@ -43,7 +44,7 @@ export default (played) => {
   
   // if last N cards are consecutive onScoringEvent( lastPlayer, N )
 
-  const runPts = runPtsPerStack(stack);
+  const runPts = ((lastCard||{}).card||{}).rank ? runPtsPerStack(stack) : 0;
   
   // if count === 31 onScoringEvent( lastPlayer, 2 )
   const thirtyOnePts = ( (count === 31) && (lastCard.card.rank)) ? 2 : 0;

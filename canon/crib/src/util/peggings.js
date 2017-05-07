@@ -78,6 +78,25 @@ export default [
     played: [
       { card: { rank: 3, suit: 0 }, player: 0},
       { card: { rank: 2, suit: 1 }, player: 1},
+      { card: { }, player: 0},
+      { card: { rank: 1, suit: 1 }, player: 1},
+    ],
+    stack: [
+      { card: { rank: 3, suit: 0 }, player: 0},
+      { card: { rank: 2, suit: 1 }, player: 1},
+      { card: { }, player: 0},
+      { card: { rank: 1, suit: 1 }, player: 1},
+    ],
+    score: 3,
+    player: 1,
+    count: 6,
+    name: 'my 3-run ordered',
+  },
+  
+  {
+    played: [
+      { card: { rank: 3, suit: 0 }, player: 0},
+      { card: { rank: 2, suit: 1 }, player: 1},
       { card: { rank: 1, suit: 1 }, player: 0},
     ],
     stack: [
