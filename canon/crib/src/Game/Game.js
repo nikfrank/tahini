@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 import './Game.css';
 
 import Round from '../Round/';
+import Scoreboard from '../pure/Scoreboard';
 
 import score from '../util/score';
 
@@ -34,10 +35,20 @@ class Game extends Component {
       nuGame: (subState, action) => subState,
       // .set whatever to new gameState
 
-// if one player has >120, set game to HEwon, don't change score further
+      // if one player has >120, set game to HEwon, don't change score further
       
       trackScoringEvent: (subState, { payload: e }) =>
-        subState.update('scoring', sc => sc.push(e) ),
+        (
+          subState.getIn(['scores', 0]) > 120
+        ) ? subState.set('winner', 0) : (
+          
+          subState.getIn(['scores', 1]) > 120
+        ) ? subState.set('winner', 1) : (
+
+          // update winer automatically (this waits til next scoring event)
+          subState
+            .update('scoring', sc => sc.push(fromJS(e)) )
+            .updateIn(['scores', e.player], sc => sc + e.pts) ),
     };
   }
   
@@ -45,6 +56,8 @@ class Game extends Component {
     return fromJS({
       mode: '1p-cp',
       scoring: [],
+      winner: -1,
+      scores: [0, 0],
     });
   }
 
@@ -56,26 +69,14 @@ class Game extends Component {
   
   render() {
     const { CurrentHand } = this;
-
+    
     return (
       <div className="Game">
-
-        <p>
-          my pts:
-          {
-            this.props.subState.get('scoring').toJS()
-                .filter(se => se.player === 1)
-                .reduce((p, c)=> (p + c.pts), 0)
-          }
-          {'   '}
-          cp pts:
-          {
-            this.props.subState.get('scoring').toJS()
-                .filter(se => se.player === 0)
-                .reduce((p, c)=> (p + c.pts), 0)
-          }
-        </p>
-
+        <Scoreboard scoring={this.props.subState.get('scoring')}/>
+        {
+          (this.props.subState.get('winner') > -1) ?
+          ['computer', 'p1'][this.props.subState.get('winner')]+' won' : ''
+        }
         <div style={{position:'relative'}}>
           <CurrentHand onScoringEvent={this.props.trackScoringEvent}
                        scoring={this.props.subState.get('scoring')}/>

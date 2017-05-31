@@ -13,12 +13,20 @@ module.exports = {
   Base: Base,
   networkMiddleware: networkMiddleware,
   networkHandlers: networkHandlers,
+
   consumeActionByNamespace: util.consumeActionByNamespace,
   isolateMutationByDataPath: util.isolateMutationByDataPath,
   applyPartialAction: util.applyPartialAction,
+
+  getNextState: util.getNextState,
+  toJS: util.toJS,
+  rejectify: util.rejectify,
+  
   bootStores: stores.bootStores,
   baseReducerHash: stores.baseReducerHash,
+
   connectToLexicalScope: devices.connectToLexicalScope,
   connectDeviceFactory: devices.connectDeviceFactory,
+
   bootApp: booting.bootApp,
 };

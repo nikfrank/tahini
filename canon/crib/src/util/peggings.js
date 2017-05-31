@@ -112,6 +112,25 @@ export default [
   
   {
     played: [
+      { card: { rank: 8, suit: 0 }, player: 1},
+      { card: { rank: 3, suit: 0 }, player: 0},
+      { card: { rank: 2, suit: 1 }, player: 1},
+      { card: { rank: 1, suit: 1 }, player: 0},
+    ],
+    stack: [
+      { card: { rank: 8, suit: 0 }, player: 1},
+      { card: { rank: 3, suit: 0 }, player: 0},
+      { card: { rank: 2, suit: 1 }, player: 1},
+      { card: { rank: 1, suit: 1 }, player: 0},
+    ],
+    score: 3,
+    player: 0,
+    count: 14,
+    name: 'later 3-run ordered',
+  },
+  
+  {
+    played: [
       { card: { rank: 3, suit: 0 }, player: 0},
       { card: { rank: 1, suit: 1 }, player: 1},
       { card: { rank: 2, suit: 1 }, player: 0},
@@ -125,6 +144,23 @@ export default [
     player: 0,
     count: 6,
     name: '3-run misordered',
+  },
+  
+  {
+    played: [
+      { card: { rank: 11, suit: 0 }, player: 0},
+      { card: { rank: 9, suit: 1 }, player: 1},
+      { card: { rank: 10, suit: 1 }, player: 0},
+    ],
+    stack: [
+      { card: { rank: 11, suit: 0 }, player: 0},
+      { card: { rank: 9, suit: 1 }, player: 1},
+      { card: { rank: 10, suit: 1 }, player: 0},
+    ],
+    score: 3,
+    player: 0,
+    count: 29,
+    name: 'high 3-run misordered', // this had a string sort bug '10' < '9'!
   },
   
   {

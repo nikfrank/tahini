@@ -21,3 +21,24 @@ export const addRelativePath = (dataPath, relPath)=>{
   relPath.forEach(part=> (part === '..')? fullPath.pop(): fullPath.push(part));
   return fullPath;
 };
+
+
+// testing util
+export const getNextState = store => ()=> (
+  new Promise((s, j)=>{
+    const f = store.subscribe(()=>{
+      f();
+      s(store.getState());
+    });
+  }) );
+
+export const toJS = state => state.toJS();
+
+export const rejectify = fn => state => {
+  try{
+    fn(state);
+    return Promise.resolve();
+  } catch(e) {
+    return Promise.reject(e);
+  }
+};

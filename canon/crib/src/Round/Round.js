@@ -168,7 +168,10 @@ class Round extends Component {
         }));
     }
 
-    if (nuProps.subState.get('phase') === 'score') {
+    if ( (nuProps.subState.get('phase') === 'score') &&
+         (this.props.subState.get('phase') !== 'score') ){
+      this.props.setPhase('post-score');
+      
       this.props.onScoringEvent({
         player: nonCrib,
         type: 'nonCrib hand',
@@ -183,13 +186,16 @@ class Round extends Component {
                     nuCut),
       });
 
+
+      const cribCut = (nuCut.rank !== 11) ?
+                      { suit: nuCut.suit } : {};
+
       this.props.onScoringEvent({
         player: cribOwner,
         type: 'crib',
-        pts: score( this.props.subState.get( 'crib' ).toJS().concat( nuCut ) ),
+        pts: score( this.props.subState.get( 'crib' ).toJS()
+                        .concat( nuCut ), cribCut),
       });
-
-      this.props.setPhase('post-score');
     }
   }
   
@@ -234,7 +240,9 @@ class Round extends Component {
     const showHands = this.props.subState.get('phase') === 'post-score';
 
     const PeggingDevice = this.Pegging;
-    
+
+    const cribCut = (this.props.subState.getIn(['cut', 'rank']) !== 11) ?
+                    ({ suit: this.props.subState.getIn(['cut', 'suit']) }) : {};
     return (
       <div className="Round">
         
@@ -307,10 +315,16 @@ class Round extends Component {
                   pts
                 </p>
                 <p>
+                  {
+                    ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
+                  }
                   Crib:
                   {
-                    score( this.props.subState.get( 'crib' ).toJS().concat(
-                      this.props.subState.get('cut').toJS() ) )
+                    score(
+                      this.props.subState.get( 'crib' ).toJS().concat(
+                        this.props.subState.get('cut').toJS() ),
+                      cribCut
+                    )
                   }
                   pts
                 </p>

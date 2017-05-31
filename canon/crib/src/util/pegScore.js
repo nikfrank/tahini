@@ -2,10 +2,10 @@ export const runPtsPerStack = stack => {
   for ( let i = stack.length; i>2; i--)
     if ( stack.filter(c => c.card.rank)
               .slice(-i)
-              .map( c => c.card.rank )
-              .sort()
+              .map( c => 1*c.card.rank )
+              .sort((a, b) => (a - b))
               .reduce( (p, c, i, a) => ( p && ( (!i) || ( c - a[i-1] === 1)) ), true) )
-      return stack.filter(c => c.card.rank).length;
+      return stack.filter(c => c.card.rank).slice(-i).length;
 
   return 0;
 };
