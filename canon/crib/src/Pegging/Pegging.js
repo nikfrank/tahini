@@ -35,19 +35,39 @@ class Pegging extends Component {
   static get reducer(){
     return {
 
-      // if the player tries to play a card that goes > 31,
-      // but has one that doesn't. don't allow!
       playCard: (subState, { payload: [hi, ci] }) =>
         (
+          // out of turn
           (subState.get('nextToPlay') !== hi) &&
           (subState.getIn(['hands', subState.get('nextToPlay')]).size)
         ) ? subState : (
-          
+
+          // passing
           ci === null
         ) ? subState.update('played', pl =>
           pl.push( fromJS({ card: {}, player: hi }))
         ).set('nextToPlay', (hi + 1)%2) : (
           
+          // block stack tipping
+          subState.getIn( ['hands', hi] ).map( card => {
+            const played = subState.get('played').toJS();
+            const currentCount = pegScore( played ).count;
+            return pegScore( played.concat({
+              card: card.toJS()
+            }) ).count > currentCount;
+          }).reduce( (p, c)=> (p || c), false) && (
+
+            pegScore(
+              subState
+                .get('played').toJS()
+                .concat({
+                  card: subState.getIn(['hands', hi, ci]).toJS()
+                })
+            ).count < pegScore( subState.get('played').toJS() ).count
+            // if there is a way to play where count goes up
+          ) 
+        ) ? subState : (
+            
           subState
             .update('played', pl =>
               pl.push( fromJS({
