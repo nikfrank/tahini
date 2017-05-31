@@ -14,6 +14,10 @@ tahini should enforce 100% coverage on itself and all of its canon apps
 
 only withis will it be worthy of adoption.
 
+[![Build Status](https://travis-ci.org/nikfrank/coverage-tahini-crib.svg?branch=master)](https://travis-ci.org/nikfrank/coverage-tahini-crib)
+
+[![Coverage Status](https://coveralls.io/repos/github/nikfrank/coverage-tahini-crib/badge.svg?branch=master)](https://coveralls.io/github/nikfrank/coverage-tahini-crib?branch=master)
+
 
 ## notices / thanks
 
