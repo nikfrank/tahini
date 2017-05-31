@@ -2,6 +2,7 @@
   "name": "crib",
   "version": "0.1.0",
   "dependencies": {
+    "enzyme": "^2.8.2",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
     "react-redux": "^5.0.4",
