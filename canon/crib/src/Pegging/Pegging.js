@@ -104,7 +104,7 @@ class Pegging extends Component {
 
       if( count !== 31 )
         this.props.onScoringEvent({ player, type: 'peg-end', pts: 1 });
-      
+
       this.props.onComplete();
       
 

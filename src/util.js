@@ -24,12 +24,14 @@ export const addRelativePath = (dataPath, relPath)=>{
 
 
 // testing util
-export const getNextState = store => ()=> (
+export const getNextState = (store, fn = ()=>0) => (...args)=> (
   new Promise((s, j)=>{
     const f = store.subscribe(()=>{
       f();
       s(store.getState());
     });
+
+    fn(...args);
   }) );
 
 export const toJS = state => state.toJS();

@@ -77,7 +77,7 @@ it('plays a card nu', ()=>{
 
 
 
-it('plays a hand', () => {
+it('plays cp crib hand', () => {
   let getDevice, appStore, PeggingD;
 
   const dataPath = [];
@@ -107,53 +107,115 @@ it('plays a hand', () => {
   
   PeggingD = getDevice(Pegging, dataPath, handInitState);
   
-  const deal = jest.fn();
-  const cpPeg = jest.fn();
-
+  const complete = jest.fn();
+  const scoring = jest.fn();
+  
   const p = mount(
-    <PeggingD />
+    <PeggingD onComplete={complete} onScoringEvent={scoring}/>
   );
 
   const cards = p.find(Card);
   const cardbacks = p.find(CardBack);
   const hands = p.find(Hand);
 
-  console.log(cards.length, cardbacks.length, hands.length);
+  return [1, 2, 3, 4].reduce((s, c)=>
+    s.then(()=> p.find(Card))
+     .then(getNextState(
+       appStore,
+       cards => cards.last().simulate('click')
+     )).then(toJS)
 
-  return Promise
-    .resolve()
-    .then(()=> p.find(Card))
-    .then(cards => cards.last().simulate('click'))
-    .then(getNextState(appStore)).then(toJS)
-    .then( rejectify( state => {
-      
-      expect( state.played ).toHaveLength(2);
-      expect( state.hands[0] ).toHaveLength(3);
-      expect( state.hands[1] ).toHaveLength(3);
-      
-    }) )
+     .then( rejectify( state => {
+       expect( state.played ).toHaveLength(2 * c - 1);
+       expect( state.hands[0] ).toHaveLength(5 - c);
+       expect( state.hands[1] ).toHaveLength(4 - c);
+       
+     }) )
 
-  
-    .then(()=> p.find(Card))
-    .then(cards => cards.last().simulate('click'))
-    .then(getNextState(appStore)).then(toJS)
-    .then( rejectify( state => {
-      
-      expect( state.played ).toHaveLength(4);
-      expect( state.hands[0] ).toHaveLength(2);
-      expect( state.hands[1] ).toHaveLength(2);
-      
-    }) )  
+     .then(getNextState(appStore)).then(toJS)
+     .then( rejectify( state => {
+       expect( state.played ).toHaveLength(2 * c);
+       expect( state.hands[0] ).toHaveLength(4 - c);
+       expect( state.hands[1] ).toHaveLength(4 - c);
+       
+     })
+     ), Promise.resolve()
+    
+  ).then( rejectify(()=>{
+    expect( complete.mock.calls ).toHaveLength(1);
+    expect( scoring.mock.calls ).toHaveLength(1); // peg end
+  }))
 });
 
 
-// there's a pattern here
-// sim event
-// wait for next state := (subscribe -> unsubscribe, next function)
+it('plays my crib hand', () => {
+  let getDevice, appStore, PeggingD;
 
-// :::::
-// then( ()=> p.find(...) )
-// then( simulate(whatever) )
-// then( getNextState )
-// then( state=> expect(something) )
+  const dataPath = [];
+  
+  const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
+  ({ getDevice } = connectDeviceFactory( stores ));
+  ({ appStore } = stores);
 
+  const handInitState = Pegging.initState.merge({
+    hands: [
+      [
+        { rank:1, suit:0 },
+        { rank:1, suit:1 },
+        { rank:1, suit:2 },
+        { rank:1, suit:3 },
+      ],
+      
+      [
+        { rank:2, suit:0 },
+        { rank:2, suit:1 },
+        { rank:2, suit:2 },
+        { rank:2, suit:3 },
+      ],
+    ],
+    nextToPlay: 0,
+  });
+  
+  PeggingD = getDevice(Pegging, dataPath, handInitState);
+  
+  const complete = jest.fn();
+  const scoring = jest.fn();
+  
+  const p = mount(
+    <PeggingD onComplete={complete} onScoringEvent={scoring}/>
+  );
+
+  const cards = p.find(Card);
+  const cardbacks = p.find(CardBack);
+  const hands = p.find(Hand);
+
+
+  return [1, 2, 3, 4].reduce((s, c)=>
+    s.then(()=> p.find(Card))
+       
+     .then(getNextState(
+       appStore,
+       cards => cards.last().simulate('click')
+     )).then(toJS)
+    
+     .then( rejectify( state => {
+       expect( state.played ).toHaveLength( 2 * c );
+       expect( state.hands[0] ).toHaveLength(4 - c);
+       expect( state.hands[1] ).toHaveLength(4 - c); 
+     })
+     ).then( c < 4 ? getNextState(appStore) : ()=>0
+     ), Promise.resolve()
+    
+  ).then( rejectify(()=>{
+    
+    expect( complete.mock.calls ).toHaveLength(1);
+    expect( scoring.mock.calls ).toHaveLength(1);
+     
+ }))
+});
+
+// still need to test passing, trolling
+// (can play low, play over 31)
+// (clicking when not allowed to play)
+
+// all testing that scoring is correct

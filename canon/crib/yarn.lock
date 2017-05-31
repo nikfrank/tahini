@@ -4800,9 +4800,9 @@ table@^3.7.8:
     slice-ansi "0.0.4"
     string-width "^2.0.0"
 
-tahini@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/tahini/-/tahini-1.2.1.tgz#e8ea633e43afb2e1bb5ae78071e575e92b5ccf8e"
+tahini@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/tahini/-/tahini-1.3.2.tgz#b24eaa6ccab03008890d9ca6226371a079e62e94"
   dependencies:
     immutable "^3.8.1"
     react "^15.5.3"
