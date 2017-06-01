@@ -89,7 +89,7 @@ describe('Dashboard', ()=>{
       p = mount(<BoundDashboard/>);
     });
 
-    it('can reset a TodoList child device', (done)=>{      
+    it('can reset a TodoList child device', (done)=>{
       const device = p.find('.'+styles.card)
 		      .filterWhere(w=> w.find(SortedTodoList).length)
 		      .last();

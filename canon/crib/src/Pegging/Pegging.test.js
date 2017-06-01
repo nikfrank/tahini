@@ -5,7 +5,6 @@ import { mount } from 'enzyme';
 import { fromJS } from 'immutable';
 
 import {
-  Base,
   bootStores,
   connectDeviceFactory,
   networkMiddleware,
@@ -15,15 +14,14 @@ import {
   rejectify,
 } from 'tahini';
 
-const { it, expect } = global;
 
 import Pegging from './Pegging';
-import Card, { CardBack } from '../pure/Card';
-import Hand from '../pure/Hand';
-
-import pegScore from '../util/pegScore';
+import Card from '../pure/Card';
 
 import networkHandlers from '../network/';
+import pegScore from '../util/pegScore';
+
+const { it, expect } = global;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -371,8 +369,7 @@ it('disallows stack tipping', () => {
   );
 
 
-  // here play cards, assert passes are made
-  
+  // here play cards, assert illegal play is blocked.  
   return Promise
     .resolve()
 
