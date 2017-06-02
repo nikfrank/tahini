@@ -7,7 +7,7 @@ class cpChooseCribCards {
 
   handleRequest( action ){
     const { hand, isCpCrib, target } = action.network.payload;
-    
+
     let weights = [];
 
     for( let i = 1; i<=13; i++)

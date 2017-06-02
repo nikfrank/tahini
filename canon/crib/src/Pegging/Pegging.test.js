@@ -98,8 +98,6 @@ const handState = Pegging.initState.merge({
 
 it('plays cp crib hand', () => {
   let getDevice, appStore, PeggingD;
-
-  const dataPath = [];
   
   const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
   ({ getDevice } = connectDeviceFactory( stores ));
@@ -108,7 +106,8 @@ it('plays cp crib hand', () => {
   const handInitState = handState.merge({
     nextToPlay: 1,
   });
-  
+
+  const dataPath = [];
   PeggingD = getDevice(Pegging, dataPath, handInitState);
   
   const complete = jest.fn();
@@ -150,8 +149,6 @@ it('plays cp crib hand', () => {
 
 it('plays my crib hand', () => {
   let getDevice, appStore, PeggingD;
-
-  const dataPath = [];
   
   const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
   ({ getDevice } = connectDeviceFactory( stores ));
@@ -160,7 +157,8 @@ it('plays my crib hand', () => {
   const handInitState = handState.merge({
     nextToPlay: 0,
   });
-  
+
+  const dataPath = [];
   PeggingD = getDevice(Pegging, dataPath, handInitState);
   
   const complete = jest.fn();
@@ -204,8 +202,6 @@ it('plays my crib hand', () => {
 
 it('multiclick', () => {
   let getDevice, appStore, PeggingD;
-
-  const dataPath = [];
   
   const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
   ({ getDevice } = connectDeviceFactory( stores ));
@@ -214,7 +210,8 @@ it('multiclick', () => {
   const handInitState = handState.merge({
     nextToPlay: 1,
   });
-  
+
+  const dataPath = [];
   PeggingD = getDevice(Pegging, dataPath, handInitState);
   
   const p = mount(
@@ -242,8 +239,6 @@ it('multiclick', () => {
 
 it('auto passing', () => {
   let getDevice, appStore, PeggingD;
-
-  const dataPath = [];
   
   const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
   ({ getDevice } = connectDeviceFactory( stores ));
@@ -268,7 +263,8 @@ it('auto passing', () => {
 
     nextToPlay: 1,
   });
-  
+
+  const dataPath = [];
   PeggingD = getDevice(Pegging, dataPath, handInitState);
 
   const complete = jest.fn();
@@ -332,8 +328,6 @@ it('auto passing', () => {
 
 it('disallows stack tipping', () => {
   let getDevice, appStore, PeggingD;
-
-  const dataPath = [];
   
   const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
   ({ getDevice } = connectDeviceFactory( stores ));
@@ -358,7 +352,8 @@ it('disallows stack tipping', () => {
 
     nextToPlay: 0,
   });
-  
+
+  const dataPath = [];
   PeggingD = getDevice(Pegging, dataPath, handInitState);
 
   const complete = jest.fn();

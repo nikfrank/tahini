@@ -202,13 +202,15 @@ class Round extends Component {
   sendToCrib = ()=>{
     this.props.sendToCrib(1);
 
-    // delay?
-    this.props.computerSendToCrib(
-      this.props.subState.getIn( ['hands', 0] ),
-      this.props.subState.get('cribOwner') === 0,
-      121 - this.props.scoring.filter(se => se.player === 1)
-                .reduce((p, c)=> (p + c.pts), 0)
-    );
+    const cpHand = this.props.subState.getIn( ['hands', 0] );
+    
+    if( cpHand.size === 6 )
+      this.props.computerSendToCrib(
+        cpHand,
+        this.props.subState.get('cribOwner') === 0,
+        121 - this.props.scoring.filter(se => se.player === 1)
+                  .reduce((p, c)=> (p + c.pts), 0)
+      );
   }
 
 
@@ -233,7 +235,7 @@ class Round extends Component {
   render() {
     const showCut = (this.props.subState.get('crib').size === 4) &&
                     (!this.props.subState.getIn(['cut', 'rank']));
-
+    
     const showSend = (this.props.subState.get('crib').size !== 4);
 
     const showPegging = this.props.subState.get('phase') === 'peg';
@@ -273,7 +275,7 @@ class Round extends Component {
           <div className="cut">
             {
               showCut ?
-              (<button onClick={this.cut}>cut</button>) : null
+              (<button className="cut-button" onClick={this.cut}>cut</button>) : null
             }
             <Hand cards={[this.props.subState.get('cut')]}/>
           </div>
@@ -287,7 +289,7 @@ class Round extends Component {
 
           {
             showSend ?
-            (<button onClick={this.sendToCrib}>
+            (<button className="Round--send-to-crib" onClick={this.sendToCrib}>
               Send cards to crib
             </button>) : null
           }

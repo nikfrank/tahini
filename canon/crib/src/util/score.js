@@ -35,7 +35,8 @@ export default (hand, cut = {}) => {
 
   const fifteenPts =
     Array( Math.pow(2, ranks.length) - 1)
-      .fill(1).map( (d, i) => ('0000'+(i+1).toString(2)).slice(-1 * ranks.length).split('') )
+      .fill(1).map( (d, i) => ( Array(ranks.length).join('0')+(i+1).toString(2))
+        .slice(-1 * ranks.length).split('') )
       .filter( b =>
         (b.reduce( (p, c, i) => (p + (1 * c) * ranks[i]), 0 ) === 15)
       ).length * 2;
