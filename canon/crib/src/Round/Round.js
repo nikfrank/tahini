@@ -330,7 +330,8 @@ class Round extends Component {
                   }
                   pts
                 </p>
-                <button onClick={this.nextHand}>Deal</button>
+                <button className="Round--next-hand"
+                        onClick={this.nextHand}>Deal</button>
               </div>
             )
           }

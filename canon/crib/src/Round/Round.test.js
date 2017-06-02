@@ -11,7 +11,6 @@ import {
 
   getNextState,
   toJS,
-  rejectify,
 } from 'tahini';
 
 import Round from './Round';
@@ -90,9 +89,11 @@ it('deals a hand when mounted', ()=>{
 
   const dataPath = [];
   RoundD = getDevice(Round, dataPath, Round.initState);
+
+  const onScoring = jest.fn();
   
   const p = mount(
-    <RoundD scoring={[{player:1, pts: 0}]}/>
+    <RoundD scoring={[{player:1, pts: 0}]} onScoringEvent={onScoring}/>
   );
 
   // check that the state has been dealt
@@ -111,42 +112,42 @@ it('deals a hand when mounted', ()=>{
       appStore,
       cards => cards.at(0).simulate('click')
     ) ).then(toJS)
-    .then( rejectify( state => {
+    .then( state => {
       expect( state.hands[1].filter( c => c.selected ) ).toHaveLength(1);
-    }) )
+    })
 
     .then( ()=> p.find('button.Round--send-to-crib') )
     .then( getNextState(
       appStore,
       button => button.simulate('click')
     ) ).then(toJS)
-    .then( rejectify( state => {
+    .then( state => {
       expect( state.hands[0] ).toHaveLength(6)
       expect( state.hands[1] ).toHaveLength(6)
       expect( state.crib ).toHaveLength(0)
-    }) )
+    })
   
     .then( ()=> p.find(Card) )
     .then( getNextState(
       appStore,
       cards => cards.at(1).simulate('click')
     ) ).then(toJS)
-    .then( rejectify( state => {
+    .then( state => {
       expect( state.hands[0] ).toHaveLength(4)
       expect( state.crib ).toHaveLength(2)
       expect( state.hands[1].filter( c => c.selected ) ).toHaveLength(2);
-    }) )
+    })
   
     .then( ()=> p.find('button.Round--send-to-crib') )
     .then( getNextState(
       appStore,
       button => button.simulate('click')
     ) ).then(toJS)
-    .then( rejectify( state => {
+    .then( state => {
       expect( state.hands[0] ).toHaveLength(4)
       expect( state.hands[1] ).toHaveLength(4)
       expect( state.crib ).toHaveLength(4)
-    }) )
+    })
 
   // for some reason the nextAction doesn't trigger a props call here...
   // so I'll force one through with a meaningless change
@@ -155,31 +156,60 @@ it('deals a hand when mounted', ()=>{
       appStore,
       cards => cards.at(1).simulate('click')
     ) ).then(toJS)
-    .then( rejectify( state => {
+    .then( state => {
       expect( state.hands[0] ).toHaveLength(4)
       expect( state.hands[1] ).toHaveLength(4)
       expect( state.crib ).toHaveLength(4)
-    }) )
+    })
 
     .then( ()=> p.find('.cut-button') )
     .then( getNextState(
       appStore,
       button => button.simulate('click')
     ) ).then(toJS)
-    .then( rejectify( state => {
+    .then( state => {
       expect( state.cut.rank ).toBeGreaterThan(0);
       expect( state.cut.rank ).toBeLessThan(14);
       expect( state.cut.suit ).toBeGreaterThan(-1);
       expect( state.cut.suit ).toBeLessThan(4);
-    }))
+    })
 
     .then( ()=> p.find(Card) )
     .then( getNextState(
       appStore,
       cards => cards.at(1).simulate('click')
     ) ).then(toJS)
-    .then( rejectify( state => {
+    .then( state => {
       expect( state.phase ).toEqual('peg');
-    }))
+    })
+
+  
+  // here I'll magically skip the pegging phase
+    .then( getNextState(
+      appStore,
+      ()=> appStore.dispatch({
+        ...Round.actions.setPhase('score'),
+        dataPath, namespace: Round.namespace
+      })
+    ) ).then(toJS)
+    .then( state => {
+      expect( state.phase ).toEqual( 'post-score' );
+      expect( onScoring.mock.calls.length ).toBeGreaterThan( 2 );
+
+      expect( onScoring.mock.calls.slice(-3).map( e => e[0].type ) )
+        .toEqual(['nonCrib hand', 'cribOwner hand', 'crib']);
+    })
+
+  // next hand!
+    .then( ()=> p.find('button.Round--next-hand') )
+    .then( getNextState(
+      appStore,
+      nextButton => nextButton.simulate('click')
+    ) ).then(toJS)
+    .then( state => {
+      expect( state.hands[0] ).toHaveLength(0);
+      expect( state.hands[1] ).toHaveLength(0);
+      expect( state.cut ).toEqual({});
+    })
   
 });

@@ -15,40 +15,33 @@ class Game extends Component {
   
   static get actions(){
     return {
-      nuGame: ()=>({
-        type: 'nuGame',
-      }),
-
       trackScoringEvent: (e)=>({
         type: 'trackScoringEvent',
         payload: e,
-      }),
-
-      nextHand: ()=>({
-        type: 'nextHand',
       }),
     };
   }
 
   static get reducer(){
     return {
-      nuGame: (subState, action) => subState,
-      // .set whatever to new gameState
-
       // if one player has >120, set game to HEwon, don't change score further
       
-      trackScoringEvent: (subState, { payload: e }) =>
-        (
+      trackScoringEvent: (subState, { payload: e }) => {
+        const nuScores = subState
+          .update('scoring', sc => sc.push(fromJS(e)) )
+          .updateIn(['scores', e.player], sc => sc + e.pts);
+        
+        return ((
           subState.getIn(['scores', 0]) > 120
-        ) ? subState.set('winner', 0) : (
-          
+        ) || (
           subState.getIn(['scores', 1]) > 120
-        ) ? subState.set('winner', 1) : (
+        )) ? subState  : (
+          nuScores.getIn(['scores', 0]) > 120 ? nuScores.set('winner', 0) :
+          nuScores.getIn(['scores', 1]) > 120 ? nuScores.set('winner', 1) :
+          nuScores
+        )
+      },  
 
-          // update winer automatically (this waits til next scoring event)
-          subState
-            .update('scoring', sc => sc.push(fromJS(e)) )
-            .updateIn(['scores', e.player], sc => sc + e.pts) ),
     };
   }
   
