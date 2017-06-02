@@ -19,6 +19,8 @@ only withis will it be worthy of adoption.
 [![Coverage Status](https://coveralls.io/repos/github/nikfrank/coverage-tahini-crib/badge.svg?branch=master)](https://coveralls.io/github/nikfrank/coverage-tahini-crib?branch=master)
 
 
+(perhaps 90% is good enough?)
+
 find this app running on [heroku](http://nik-crib.herokuapp.com/)
 
 
