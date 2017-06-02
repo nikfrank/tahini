@@ -1,6 +1,6 @@
 {
   "name": "crib",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "enzyme": "^2.8.2",
     "react": "^15.5.3",
