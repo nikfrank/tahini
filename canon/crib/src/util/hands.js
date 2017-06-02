@@ -282,4 +282,30 @@ export default [
     cut: { suit: 3 },
     value: 3,
   },
+
+  {
+    name: 'crib good jack flush',
+    hand: [
+      { rank: 11, suit: 1 },
+      { rank: 8, suit: 1 },
+      { rank: 3, suit: 1 },
+      { rank: 13, suit: 1 },
+      { rank: 9, suit: 1 }, // was cut
+    ],
+    cut: { suit: 1 },
+    value: 6,
+  },
+
+  {
+    name: 'crib flush',
+    hand: [
+      { rank: 12, suit: 1 },
+      { rank: 8, suit: 1 },
+      { rank: 3, suit: 1 },
+      { rank: 13, suit: 1 },
+      { rank: 9, suit: 1 }, // was cut
+    ],
+    cut: { suit: 1 },
+    value: 5,
+  },
 ];

@@ -12,7 +12,7 @@ export default (hand, cut = {}) => {
 
 
   const flushPts = (hand.reduce( (p, c) => (( p === c.suit ) ? p : -1), hand[0].suit) > -1) ?
-                   cards.filter( ({ suit }) => (suit === hand[0].suit) ).length : 0;
+                   cards.filter( ({ suit, rank }) => ((suit === hand[0].suit) && (rank > 0)) ).length : 0;
 
   
   const runPatterns = cards.sort((a, b) => (a.rank < b.rank) ? -1 : 1)
