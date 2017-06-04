@@ -11,12 +11,12 @@ export default ({ scoring }) => {
   const lastScorePlayer = ['cp', 'me'][lastScore.get('player')] || null;
   
   return (
-    <div>
-      <p>my pts: {myPts} cp pts: {cpPts}</p>
+    <p>
+      my pts: {myPts} cp pts: {cpPts}
       {
         lastScorePlayer ?
-        <p>{lastScore.get('pts')} to {lastScorePlayer}</p> : null
+        ('  ' + lastScorePlayer +' + '+lastScore.get('pts')) : null
       }
-    </div>
+    </p>
   );
 };

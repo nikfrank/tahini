@@ -8,7 +8,7 @@ import Pegging from '../Pegging';
 
 import score from '../util/score';
 
-import './Round.css';
+import style from './Round.css.js';
 
 class Round extends Component {
   static get namespace(){
@@ -233,8 +233,8 @@ class Round extends Component {
   }
   
   render() {
-    const showCut = (this.props.subState.get('crib').size === 4) &&
-                    (!this.props.subState.getIn(['cut', 'rank']));
+    const showCut = (this.props.subState.get('crib').size === 4);
+    const cutYet = this.props.subState.getIn(['cut', 'rank']);
     
     const showSend = (this.props.subState.get('crib').size !== 4);
 
@@ -246,98 +246,97 @@ class Round extends Component {
     const cribCut = (this.props.subState.getIn(['cut', 'rank']) !== 11) ?
                     ({ suit: this.props.subState.getIn(['cut', 'suit']) }) : {};
     return (
-      <div className="Round">
+      <div style={style.container}>
         
-        <div className="left">
+        {
+          showPegging ? (
+            <PeggingDevice
+                onScoringEvent={this.props.onScoringEvent}
+                onComplete={() => this.props.setPhase('score')} />
+          ) : (
+            <div>
+              <Hand cards={this.props.subState.getIn( ['hands', 0] )}
+                    hidden={ !showHands }
+                    onClick={() => 0}/>
+
+              {
+                showSend ?
+                (<button className="Round--send-to-crib"
+                         style={style.cut}
+                         onClick={this.sendToCrib}>
+                  Send cards to
+                  {[' computer\'s ', ' my '][
+                     this.props.subState.get('cribOwner')
+                   ]}
+                  crib
+                </button>) : null
+              }
+              <Hand cards={this.props.subState.get('crib')}
+                    hidden={ !showHands } />
+              
+              <Hand cards={this.props.subState.getIn( ['hands', 1] )}
+                    onClick={ci => this.props.selectCard(1, ci)}/>
+            </div>
+          )
           
-          {
-            showPegging ? (
-              <PeggingDevice
-                  onScoringEvent={this.props.onScoringEvent}
-                  onComplete={() => this.props.setPhase('score')} />
-            ) : (
-              <div>
-                <Hand cards={this.props.subState.getIn( ['hands', 0] )}
-                      hidden={ !showHands }
-                      onClick={() => 0}/>
+        }
 
-                <Hand cards={this.props.subState.getIn( ['hands', 1] )}
-                      onClick={ci => this.props.selectCard(1, ci)}/>
-              </div>
-            )
-            
-          }
+        {
+          showCut && !cutYet ? (
+            <button style={style.cut} onClick={this.cut}>cut</button>
+          ) : null
+        }
 
-        </div>
 
-        
-        <div className="right">
-          <div className="cut">
-            {
-              showCut ?
-              (<button className="cut-button" onClick={this.cut}>cut</button>) : null
-            }
-            <Hand cards={[this.props.subState.get('cut')]}/>
-          </div>
+        {
+          cutYet? (
+            <div style={{float:'right', width:'50vw'}}>
+              <Hand cards={[this.props.subState.get('cut')]}/>
+            </div>
+          ) : null
+        }
 
-          <p>
-            {
-              ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
-            }
-            crib
-          </p>
-
-          {
-            showSend ?
-            (<button className="Round--send-to-crib" onClick={this.sendToCrib}>
-              Send cards to crib
-            </button>) : null
-          }
-          <Hand cards={this.props.subState.get('crib')}
-                hidden={ !showHands } />
-
-          {
-            !showHands ? null :
-            (
-              <div>
-                <p>
-                  Computer's hand:
-                  {
-                    score( this.props.subState.getIn( ['hands', 0] ).toJS(),
-                           this.props.subState.get('cut').toJS() )
-                  }
-                  pts
-                </p>
-                <p>
-                  My hand:
-                  {
-                    score( this.props.subState.getIn( ['hands', 1] ).toJS(),
-                           this.props.subState.get('cut').toJS() )
-                  }
-                  pts
-                </p>
-                <p>
-                  {
-                    ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
-                  }
-                  Crib:
-                  {
-                    score(
-                      this.props.subState.get( 'crib' ).toJS().concat(
-                        this.props.subState.get('cut').toJS() ),
-                      cribCut
-                    )
-                  }
-                  pts
-                </p>
-                <button className="Round--next-hand"
-                        onClick={this.nextHand}>Deal</button>
-              </div>
-            )
-          }
-        </div>
+        {
+          !showHands ? null :
+          (
+            <div>
+              <p>
+                Computer's hand:
+                {
+                  score( this.props.subState.getIn( ['hands', 0] ).toJS(),
+                         this.props.subState.get('cut').toJS() )
+                }
+                pts
+              </p>
+              <p>
+                My hand:
+                {
+                  score( this.props.subState.getIn( ['hands', 1] ).toJS(),
+                         this.props.subState.get('cut').toJS() )
+                }
+                pts
+              </p>
+              <p>
+                {
+                  ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
+                }
+                Crib:
+                {
+                  score(
+                    this.props.subState.get( 'crib' ).toJS().concat(
+                      this.props.subState.get('cut').toJS() ),
+                    cribCut
+                  )
+                }
+                pts
+              </p>
+              <button className="Round--next-hand"
+                      onClick={this.nextHand}>Deal</button>
+            </div>
+          )
+        }
       </div>
-    );
+          );
   }
 }
 

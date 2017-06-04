@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 
-import './Game.css';
-
 import Round from '../Round/';
 import Scoreboard from '../pure/Scoreboard';
 

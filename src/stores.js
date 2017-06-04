@@ -20,7 +20,10 @@ export const baseReducerHash = ()=>({
 // returns reducerHash, appStore
 export const bootStores = function(middleware = [], reducerHash = baseReducerHash()){
   const actionCreatorHash = {};
-  
+
+  if(window && window.__REDUX_DEVTOOLS_EXTENSION__)
+    middleware.push(window.__REDUX_DEVTOOLS_EXTENSION__());
+    
   const appStore = createStore(
     isolateMutationByDataPath( consumeActionByNamespace(reducerHash) ),
     applyMiddleware(...middleware)
