@@ -2,7 +2,7 @@ export default {
   cut: {
     borderRadius: '5px',
     position:'fixed',
-    top:'48vh',
+    top:'42vh',
     left:'0vw',
     width:'100vw',
     height:'10vh',

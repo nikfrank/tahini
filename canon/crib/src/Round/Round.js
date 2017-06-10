@@ -290,7 +290,7 @@ class Round extends Component {
 
         {
           cutYet? (
-            <div style={{float:'right', width:'50vw'}}>
+            <div style={style.cut}>
               <Hand cards={[this.props.subState.get('cut')]}/>
             </div>
           ) : null
