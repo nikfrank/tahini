@@ -11,7 +11,7 @@ it is also a tasty and protein rich sesame sauce which I like to buy in the shuk
 [click here to read about tahini on wikipedia](https://en.wikipedia.org/wiki/Tahini)
 
 it solves problems of
-- state modularity
+- state modularity / localization
 - component reusability (ie DRYness)
 - normalization / serializability of actions
 - app wide metaprogramming
@@ -23,32 +23,25 @@ Tahini is opinionated and yet tries to not impose / cramp your style.
 For example, it takes only one line of code to put tahini on your existing component sandwich!
 
 ```jsx
-import React from 'react';
+import React, { Component } from 'react';
 import {render} from 'react-dom';
 
 import './index.css';
 
-import { bootApp, networkMiddleware } from 'tahini';
+import { bootApp } from 'tahini';
 
-class Sandwich extends React.Component {
+class Sandwich extends Component {
   render(){
     return (
       <div>
-        this Sandwich has tahini on it!
+        this Sandwich will have tahini on it!
       </div>
     );
   }
 }
 
-const rootRoute = {
-  routePath:'/',
-  componentClass:Home,
-};
-
-import networkHandlers from './network/';
-
 render(
-  bootApp( [ networkMiddleware(networkHandlers) ], rootRoute ),
+  bootApp().getDevice( Sandwich ),
   document.getElementById('root')
 );
 
@@ -63,35 +56,171 @@ Very well, so now you can read about what we can do now that there's tahini on o
 ## Scoped Actions and Reducers
 
 ```jsx
-class Sandwich extends React.Component {
+import React, { Component } from 'react';
+import {render} from 'react-dom';
+
+import { fromJS } from 'immutable';
+
+import './index.css';
+
+import { bootApp } from 'tahini';
+
+class Sandwich extends Component {
   get actions(){
-    return { whatever: (...args)=>({ type:'whatever', payload:args }),.. } 
+    return {
+      addHummus: amountOfHummus=> ({
+        type: 'addHummus',
+        payload: amountOfHummus,
+      }),
+    };
   }
+  
   get reducer(){
-    return { whatever: (subState, action)=> subState.set('whatever', fromJS(action.payload),.. }
+    return {
+      addHummus: (state, { payload })=>
+        state.update('amountOfHummus', prev=> prev + payload),
+    };
+  }
+
+  get initState(){
+    return fromJS({ amountOfHummus: 0 });
+  }
+
+  render(){
+    return (
+      <div>
+        <p>
+          this Sandwich will have tahini on it!
+        </p>
+        <p>
+          and { this.props.subState.get('amountOfHummus') } knifeful(s) of hummus
+        </p>
+        <button onClick={()=> this.props.addHummus(1)}>
+          More hummus nu
+        </button>
+      </div>
+    );
   }
 }
+
+render(
+  bootApp().getDevice( Sandwich, [], Sandwich.initState ),
+  document.getElementById('root')
+);
 ```
 
-Here I've written a bullshit example to show you how the actions and reducers can be coupled to a Sandwich
+Now we can add hummus to our sandwich (yay!)
 
-Ok, so how do I call whatever action creator, and wtf is subState?
+so let's go over how that works, and why it looks like that.
 
+The first thing you'll notice is that we're now booting out component with an initState -
+we've declared such in a static getter on our Sandwich class, and passed it to tahini's
+getDevice method. We've declared there to be no hummus initially (oh no!)
+
+(( Also, there's a naked empty array there - that's the keypath we're mounting
+the Sandwich to - [] means it'll be the entire app, you'll get a full explanation in the section
+on dataPaths. (the signature for getDevice may change in future to make this example suck less) ))
+
+So how are we going to get hummus on our Sandwich? (ie, how to we trigger the redux flow?)
+
+##### Step 1: declare an actionCreator function on our actions hash
+
+like the initState, the actions are declared by a static getter on the Component Class. Tahini expects the actions to be in a lookup hash (dictionary) pattern. Here we have a very standard looking action.
+
+If you look ahead to the render function, you'll see we use this action as this.props.addHummus to add 1 hummus to our sandwich, which I imagine to be measured in knifefuls
+
+
+##### Step 2: declare a reducer function for the action type from Step 1
+
+like the actions, the reducers will be in a lookup hash. The name of the reducer resolved will be the type value from the action triggered. (look ma, no switch statement!). Tahini is opiononated in favour of using immutable for state (I have no tests for non-immutable states... it should work though)
+
+Here, our addHummus reducer will update the amount of hummus by adding the payload amount... which will trigger:
+
+
+##### Step 3: render JSX from this.props.subState
+
+Tahini was first conceived as a tool for localizing state in large redux applications, so the prop you receive with your Component's state is called "subState", which will make sense when we have more than one component (subStates are like lexical scopes in javascript).
+
+Here, pretty easy, we render the amountOfHummus to the DOM.
+
+Also, you'll see our actionCreator function was also mapped onto props (magically, ie by tahini)
+
+
+(( setting a mapStateToProps function on a Component was intentionally left out so far in tahini. However, it may very well have some performance advantages and may be added later. For now the subState is where it's at ))
+
+
+
+## subStates and dataPaths
+
+What happens when we strike it rich and want two Sandwiches?
+
+(let's imagine we've moved our Sandwich Component into its own file)
 
 ```jsx
-// demo of calling this.props.actionCreator
-// explanation of state mutation therefrom
+import React, { Component } from 'react';
+import {render} from 'react-dom';
+
+import { fromJS } from 'immutable';
+
+import './index.css';
+
+import { bootApp } from 'tahini';
+
+import Sandwich from './Sandwich';
+
+const app = bootApp();
+
+const FirstSandwich = app.getDevice( Sandwich, ['first'], Sandwich.initState );
+const SecondSandwich = app.getDevice( Sandwich, ['second'], Sandwich.initState );
+
+render(
+  (<div>
+    <FirstSandwich/>
+    <SecondSandwich/>
+  </div>),
+  document.getElementById('root')
+);
 ```
 
-## subStates
+That's all we have to do! 
 
-- explanation of subStates, default behaviour or the boot process
-- rendering data out of this.props.subState
 
 
 ## network layer
 
 infrastructure, vocabulary
+
+here's how to boot tahini withe network middleware
+
+```jsx
+import React, { Component } from 'react';
+import {render} from 'react-dom';
+
+import './index.css';
+
+import { bootApp, networkMiddleware } from 'tahini';
+
+class Sandwich extends Component {
+  render(){
+    return (
+      <div>
+        this Sandwich will have tahini on it!
+      </div>
+    );
+  }
+}
+
+import networkHandlers from './network/';
+
+const app = bootApp( [ networkMiddleware(networkHandlers) ] );
+const rootDevice = app.getDevice( Sandwich )
+
+render(
+  rootDevice,
+  document.getElementById('root')
+);
+
+```
 
 
 ### network handlers
@@ -191,24 +320,33 @@ When you can reason more abstractly about your app from within itself, you'll be
 
 ## future dev
 
-((react native integration & isomorphism))
+(( react native integration & isomorphism ))
 
-((reified management concept, using it to resolve action triggers))
+(( reified management concept, using it to resolve action triggers ))
 
-((performance characterization, investigate propriety of lifecycle use))
+(( triggering actions from actions ))
 
-((unsubscribe from partial substate))
+(( lijsp action.handlers ))
 
-((JSON serial routing))
+(( performance characterization, investigate propriety of lifecycle use ))
 
-- test legibility and brevity
+(( unsubscribe from partial substate ))
+
+(( JSON serial routing ))
+
+(( boring stuff like good error messages ))
+
+(( examples with animations / react-dnd ))
+
+- test legibility and brevity (spring 2017 some work done)
 - network modules for sockets / RTC
-- middleware for redo/ undo, remote control, bug reproducer
+- middleware for redo/ undo, remote control
+- bug reproducer / redux dev tool integration
 
-middleware/ network layer CACHE (with its own redux store?)
+network layer CACHE (with its own redux store?)
 could be used for "get at least # of something" queries
 or offline mode
-would sit in front of the standard network middleware
+would sit in front of the standard network http fetcher
 
 ---
 ===
