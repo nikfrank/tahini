@@ -184,11 +184,36 @@ render(
 
 That's all we have to do! 
 
+Each of the sandwiches will work only in their part of the state, independently.
+
+The FirstSandwich device is mounted to his scope at the dataPath ['first'] - SecondSandwich lives at ['second'] (and is a great name for a deli)... our total state will look like:
+
+```
+{
+  first: { amountOfHummus: 0 },
+  second: { amountOfHummus: 0 },
+}
+```
+
+and triggering the addHummus action on either Sandwich will increment HIS hummus, not the other's.
+
+
+The key takeaway here is that we were able to do this WITHOUT ANY CHANGES to Sandwich.js! The Sandiwch component has no knowledge of where on the state he is mounted, and that's a good thing, because it means we can program our components without having to think about anything else!
+
+Not having to think about anything else is great, as it limits the cognitive load of any given programming task / code review - in effect easing the learning curve for a developer who joins our project.
+
+What this means for actionCreator functions (which we get on this.props.actionCreatorFunctionName) is that they are scoped to a given instance of a Device, and can be used well (bound to eventTriggers, given to pure component children to call), or misused (passed to parent components and called willy nilly)
+
+(( this needs a section about pure components, triggering actions on siblings / parents / children ))
 
 
 ## network layer
 
-infrastructure, vocabulary
+(( infrastructure, vocabulary ))
+
+so we can do simple DOM activities, now let's work with an API / network behaviour.
+
+The pattern we use in tahini to interact with asynchronous / impure (Math.random) actions is to define a network handler (an es6 class implementing a .handleRequest method... we'll see some of these later), give that handler to the networkMiddleware, and then trigger the networkHandler from an action
 
 here's how to boot tahini withe network middleware
 
@@ -200,17 +225,25 @@ import './index.css';
 
 import { bootApp, networkMiddleware } from 'tahini';
 
-class Sandwich extends Component {
-  render(){
-    return (
-      <div>
-        this Sandwich will have tahini on it!
-      </div>
-    );
+import Sandwich from './Sandwich';
+
+class getHummus {
+  constructor( next, done, err ){
+    this.next = next;
+    this.done = done;
+    this.err = err;
+  }
+
+  handleRequest( action ){
+    fetch( `/hummus/${action.network.payload.sandwichId}` )
+      .then( response => this.next({ payload: response.json().amountOfHummus })
+      .catch(e => this.err({err: e}) )
+      .then( this.done );
   }
 }
 
-import networkHandlers from './network/';
+
+const networkHandlers = { getHummus };
 
 const app = bootApp( [ networkMiddleware(networkHandlers) ] );
 const rootDevice = app.getDevice( Sandwich )
@@ -221,6 +254,67 @@ render(
 );
 
 ```
+
+and in Sandwich.js
+
+```
+//...
+static get actions(){
+  return {
+    loadHummus: sandwichId=> ({
+      network: {
+        handler: 'getHummus',
+        payload: { sandWichId },
+        nextAction: { type: 'setHummus' },
+      },
+    }),
+
+    //...
+  };
+}
+
+static get reducer(){
+  return {
+    setHummus: (state, { payload })=>
+      state.set('amountOfHummus', payload),
+
+    //...
+  };
+}
+
+componentDidMount(){
+  this.props.loadHummus( this.props.sandwichId );
+}
+
+//...
+```
+
+assuming we have a GET /hummus/:sandwichId route exposed by our server, and a sandwichId passed as a prop to our Sandwich Device, this will load the hummus from the server into our reducer and onto our state and so into our render.
+
+
+HOW IT WORKS:
+
+tahini's networkMiddleware intercepts the action which has a .network field defined (otherwise we would get an error for it not having a type) and then resolves the handler requested by name.
+
+The handler was registered withe middleware on boot, so in this case is found - the middleware then makes an instance of the networkHandler class and calls its .handleRequest method withe action.
+
+The next, done, err functions the class is instantiated with are functions which will dispatch the nextAction / doneAction / errAction listed in action.network MERGED with whatever is passed to them.
+
+The done function will also destroy the instance of the networkHandler.
+
+This pattern allows us to reuse a network handler over the lifetime of an observable or stream-like source (eg a socket connection for a chat component) scoped to the instance of the device we mounted.
+
+
+Downstream network calls:
+
+(( example of nextAction.network ))
+
+
+
+preflight actions:
+
+(( type and network on an action ))
+
 
 
 ### network handlers
@@ -327,6 +421,8 @@ When you can reason more abstractly about your app from within itself, you'll be
 (( triggering actions from actions ))
 
 (( lijsp action.handlers ))
+
+(( subState -> state ? ))
 
 (( performance characterization, investigate propriety of lifecycle use ))
 
