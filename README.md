@@ -433,6 +433,11 @@ When you can reason more abstractly about your app from within itself, you'll be
 
 (( examples with animations / react-dnd ))
 
+(( refactor simple http calls into simpler Network handler factory ))
+(( refactor simple http tests into test factory ))
+
+(( demonstration of timing network handler for animations (req animation frame) ))
+
 - test legibility and brevity (spring 2017 some work done)
 - network modules for sockets / RTC
 - middleware for redo/ undo, remote control
