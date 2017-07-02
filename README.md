@@ -66,7 +66,7 @@ import './index.css';
 import { bootApp } from 'tahini';
 
 class Sandwich extends Component {
-  get actions(){
+  static get actions(){
     return {
       addHummus: amountOfHummus=> ({
         type: 'addHummus',
@@ -75,14 +75,14 @@ class Sandwich extends Component {
     };
   }
   
-  get reducer(){
+  static get reducer(){
     return {
       addHummus: (state, { payload })=>
         state.update('amountOfHummus', prev=> prev + payload),
     };
   }
 
-  get initState(){
+  static get initState(){
     return fromJS({ amountOfHummus: 0 });
   }
 
@@ -113,9 +113,8 @@ Now we can add hummus to our sandwich (yay!)
 
 so let's go over how that works, and why it looks like that.
 
-The first thing you'll notice is that we're now booting out component with an initState -
-we've declared such in a static getter on our Sandwich class, and passed it to tahini's
-getDevice method. We've declared there to be no hummus initially (oh no!)
+The first thing you'll notice is that we're now booting out component with an initState at the bottom in our react-dom render call-
+We've declared there to be no hummus initially (oh no!) in the static getter for initState
 
 (( Also, there's a naked empty array there - that's the keypath we're mounting
 the Sandwich to - [] means it'll be the entire app, you'll get a full explanation in the section
