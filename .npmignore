@@ -14,3 +14,6 @@ npm-debug.log
 # coverage
 coverage/
 .nyc_output/
+
+# dep
+node_modules/

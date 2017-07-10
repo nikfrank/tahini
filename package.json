@@ -1,6 +1,6 @@
 {
   "name": "tahini",
-  "version": "1.3.8",
+  "version": "1.3.9",
   "description": "flexible vocabulary scoping for react",
   "scripts": {
     "build": "babel -d dist/ src/",

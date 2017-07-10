@@ -374,6 +374,10 @@ preflight actions:
 ---
 
 (example standalone network middleware usage)
+--> the way to do this is to wrap all of the components from the top level
+so, probably they would all be mounted to the root state, or their view states
+maybe intergrate this with a caching example so data can spread over various components
+
 
 (example for reflection)
 
