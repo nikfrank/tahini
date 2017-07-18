@@ -1,7 +1,7 @@
 class ListWala {
   constructor(next, done, err, {Fetcher}){
     this.fetcher = new Fetcher(
-      response=> next( {payload:{list: response.map(i=> i.title) }} ),
+      response=> next({ payload:{ list: response.map(i=> i.title) } }),
       done,
       err
     );

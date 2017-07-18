@@ -9,10 +9,14 @@ var booting = require('./dist/booting');
 var networkMiddleware = require('./dist/network-middleware').default;
 var networkHandlers = require('./dist/network-handlers').default;
 
+var simpleHTTP = require('./dist/network-handlers/simpleHTTP').default;
+
 module.exports = {
   Base: Base,
   networkMiddleware: networkMiddleware,
   networkHandlers: networkHandlers,
+
+  simpleHTTP: simpleHTTP,
 
   consumeActionByNamespace: util.consumeActionByNamespace,
   isolateMutationByDataPath: util.isolateMutationByDataPath,

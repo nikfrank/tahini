@@ -26,10 +26,14 @@ import networkMiddleware from './src/network-middleware';
 
 import networkHandlers from './src/network-handlers';
 
+import simpleHTTP from './src/network-handlers/simpleHTTP';
+
 export {
   Base,
   networkMiddleware,
   networkHandlers,
+
+  simpleHTTP,
 
   consumeActionByNamespace,
   isolateMutationByDataPath,
