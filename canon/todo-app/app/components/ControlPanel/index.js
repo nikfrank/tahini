@@ -76,12 +76,33 @@ class ControlPanel extends Base {
     return (
       <div className={styles.controlPanel}>
 	<h3>Control Panel Device</h3>
-	<div onClick={this.props.getItemsFromAPI}>Get from API</div>
+	<div onClick={this.props.getItemsFromAPI} className="api-btn">
+          Get from API
+        </div>
 	{
           this.props.subState.get('list', []).map((item, i)=>
-            (i<5)? <div key={item}> {item} </div>:''
+            (i<5)? <div key={item} className="api-item"> {item} </div> : null
 	  )
         }
+
+        <div onClick={this.props.getItemsFromSimpleAPI} className="simple-btn">
+          Get from Simple API
+        </div>
+	{
+          this.props.subState.get('listSimple', []).map((item, i)=>
+            (i<5)? <div key={item} className="simple-item"> {item} </div> : null
+	  )
+        }
+        
+        <div onClick={this.props.getItemsFromMockAPI} className="mock-btn">
+          Get from Mock API
+        </div>
+	{
+          this.props.subState.get('listMock', []).map((item, i)=>
+            (i<5)? <div key={item} className="mock-item"> {item} </div> : null
+	  )
+        }
+
         <button onClick={this.props.subscribeItemStream}>subscribe</button>
         <button onClick={this.props.unsubscribeItemStream}>unsubscribe</button>
         <div>{ this.props.subState.get('lastUnsubscribe', 0) }</div>
@@ -109,16 +130,16 @@ class ControlPanel extends Base {
 		    {item.get('text')}
 		  </div>
 		 )}
-		  <div className={styles.circleButtons}>
-		    <div onClick={()=> this.props.resetDevice(key)}
-			 className={styles.reset}>
-		      reset
-		    </div>
-		    <div onClick={()=> this.props.destroyDevice(key)}
-			 className={styles.destroy}>
-		      destroy
-		    </div>
+		<div className={styles.circleButtons}>
+		  <div onClick={()=> this.props.resetDevice(key)}
+		       className={styles.reset}>
+		    reset
 		  </div>
+		  <div onClick={()=> this.props.destroyDevice(key)}
+		       className={styles.destroy}>
+		    destroy
+		  </div>
+		</div>
 	      </div>
 	    </li>
 	   )}

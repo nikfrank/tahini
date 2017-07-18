@@ -1,6 +1,5 @@
 import Fetcher from '../http/';
 
-
 const factory = ({ url, method, headers })=>  
   class simpleFetcher {
     constructor(next, done, err){
@@ -23,6 +22,7 @@ const factory = ({ url, method, headers })=>
       }
 
       action.network.method = method;
+      action.network.headers = headers;
       
       this.fetcher.handleRequest(action);
     }
@@ -34,6 +34,7 @@ export default {
   'post': (url)=> factory({ url, method: 'POST' }),
   'put': (url)=> factory({ url, method: 'PUT' }),
 
+  'poll': (url)=> {},
   
   mock: (response)=>
     class simpleMock {

@@ -8,6 +8,24 @@ const actions = {
     }
   }),
 
+  getItemsFromSimpleAPI:()=>({
+    network:{
+      handler:'ListWalaSimple',
+      nextAction:{
+        type:'setListSimple'
+      }
+    }
+  }),
+
+  getItemsFromMockAPI:()=>({
+    network:{
+      handler:'ListWalaMock',
+      nextAction:{
+        type:'setListMock'
+      }
+    }
+  }),
+
   subscribeItemStream:()=>({
     network:{
       handler:'ListStream',

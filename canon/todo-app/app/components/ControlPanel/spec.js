@@ -181,15 +181,88 @@ describe('ControlPanel', ()=>{
     
     const p = mount(<BoundControlPanel devices={[]}/>);
     
-    const apiButton = p.find('h3 + div').first();
+    const apiButton = p.find('.api-btn').first();
     
     expect(apiButton).to.be.ok;
 
     const uns = appStore.subscribe(()=>{
+
+      expect(p.find('.api-item').length).to.eql(5);
+      
+      
       done();
       uns();
     });
     
     apiButton.simulate('click');
   });
+
+
+  it('calls the mock api', (done)=>{
+    const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
+    const { getDevice } = connectDeviceFactory( stores );
+
+    const { appStore } = stores;
+
+    // perhaps to test that only 5 show
+
+    // this stub ought to be declared in the wala
+    const testValue = [
+      {title:'blah'},
+      {title:'yada'},
+      {title:'hmm'},
+      {title:'something'},
+      {title:'to'},
+      {title:'say'}
+    ];
+    global.fetch = sinon.stub().returns( Promise.resolve({
+      status:200,
+      json:()=>Promise.resolve(testValue)
+    }) );
+    
+    const BoundControlPanel = getDevice(ControlPanel, [], ControlPanel.initState);
+    
+    const p = mount(<BoundControlPanel devices={[]}/>);
+    
+    const apiButton = p.find('.simple-btn').first();
+    
+    expect(apiButton).to.be.ok;
+
+    const uns = appStore.subscribe(()=>{
+
+      expect(p.find('.simple-item').length).to.eql(5);
+      
+      
+      done();
+      uns();
+    });
+    
+    apiButton.simulate('click');
+  });
+
+  it('calls the mock api', (done)=>{
+    const stores = bootStores( [ networkMiddleware(networkHandlers) ] );
+    const { getDevice } = connectDeviceFactory( stores );
+
+    const { appStore } = stores;
+    
+    const BoundControlPanel = getDevice(ControlPanel, [], ControlPanel.initState);
+    
+    const p = mount(<BoundControlPanel devices={[]}/>);
+    
+    const apiButton = p.find('.mock-btn').first();
+    
+    expect(apiButton).to.be.ok;
+
+    const uns = appStore.subscribe(()=>{
+      expect(appStore.getState().toJS().listMock.length).to.eql(6);
+      
+      
+      done();
+      uns();
+    });
+    
+    apiButton.simulate('click');
+  });
+
 });
