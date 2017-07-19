@@ -208,11 +208,72 @@ What this means for actionCreator functions (which we get on this.props.actionCr
 
 ## network layer
 
-(( infrastructure, vocabulary ))
-
 so we can do simple DOM activities, now let's work with an API / network behaviour.
 
-The pattern we use in tahini to interact with asynchronous / impure (Math.random) actions is to define a network handler (an es6 class implementing a .handleRequest method... we'll see some of these later), give that handler to the networkMiddleware, and then trigger the networkHandler from an action
+there's three parts to using network behaviours
+
+1) define the network behaviour itself
+
+```jsx
+// ./src/network/get-sandwiches.js
+
+import { simpleHTTP } from 'tahini';
+
+export default simpleHTTP.get('/api/sandwich');
+
+```
+
+here we're using tahini's simpleHTTP to create our networkHandler class easily - this one will make GET requests to /api/sandwich
+
+
+2) boot tahini with network middleware, with our handlers
+
+```jsx
+// ./src/index.js
+
+import getSandwiches from './network/get-sandwiches';
+
+//...
+
+
+const networkHandlers = { getSandwiches };
+
+const app = bootApp( [ networkMiddleware(networkHandlers) ] );
+
+//...
+```
+
+this will make 'getSandwiches' available in our network actions as a handler
+
+
+3) call a network action (with a handler and nextAction)
+
+
+```jsx
+// ./src/Sandwich.js
+
+//...
+
+static get actions(){
+  return {
+    loadHummus: sandwichId=> ({
+      network: {
+        handler: 'getSandwiches',
+        nextAction: { type: 'setSandwiches' },
+      },
+    }),
+  };
+}
+
+//...
+```
+
+this action will get caught by the tahini networkMiddleware, use out getHummus class we made with simpleHTTP.get to make a request, then once it's done trigger an action of type: 'setSandwiches', payload: whatever came back from the api call.
+
+
+
+putting it all together:
+
 
 here's how to boot tahini withe network middleware
 
@@ -226,21 +287,7 @@ import { bootApp, networkMiddleware } from 'tahini';
 
 import Sandwich from './Sandwich';
 
-class getHummus {
-  constructor( next, done, err ){
-    this.next = next;
-    this.done = done;
-    this.err = err;
-  }
-
-  handleRequest( action ){
-    fetch( `/hummus/${action.network.payload.sandwichId}` )
-      .then( response => this.next({ payload: response.json().amountOfHummus })
-      .catch(e => this.err({err: e}) )
-      .then( this.done );
-  }
-}
-
+import getHummus from './network/getHummus';
 
 const networkHandlers = { getHummus };
 
@@ -287,6 +334,29 @@ componentDidMount(){
 
 //...
 ```
+
+and our custom (non-simpleHTTP) network handler
+
+```js
+// ./src/network/getHummus.js
+
+export default class getHummus {
+  constructor( next, done, err ){
+    this.next = next;
+    this.done = done;
+    this.err = err;
+  }
+
+  handleRequest( action ){
+    fetch( `/hummus/${action.network.payload.sandwichId}` )
+      .then( response => this.next({ payload: response.json().amountOfHummus })
+      .catch(e => this.err({err: e}) )
+      .then( this.done );
+  }
+}
+```
+
+
 
 assuming we have a GET /hummus/:sandwichId route exposed by our server, and a sandwichId passed as a prop to our Sandwich Device, this will load the hummus from the server into our reducer and onto our state and so into our render.
 
