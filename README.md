@@ -40,8 +40,10 @@ class Sandwich extends Component {
   }
 }
 
+const TahiniSandwich = bootApp().getDevice( Sandwich );
+
 render(
-  bootApp().getDevice( Sandwich ),
+  <TahiniSandwich />,
   document.getElementById('root')
 );
 
@@ -103,8 +105,10 @@ class Sandwich extends Component {
   }
 }
 
+const TahiniSandwich = bootApp().getDevice( Sandwich, [], Sandwich.initState );
+
 render(
-  bootApp().getDevice( Sandwich, [], Sandwich.initState ),
+  <TahiniSandwich />,
   document.getElementById('root')
 );
 ```
