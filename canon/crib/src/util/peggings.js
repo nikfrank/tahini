@@ -237,3 +237,6 @@ export default [
 // played a pair
 // hit 15
 
+
+
+// make sure run is at least three long when ending (with empties)

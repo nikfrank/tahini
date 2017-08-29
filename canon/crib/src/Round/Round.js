@@ -8,7 +8,33 @@ import Pegging from '../Pegging';
 
 import score from '../util/score';
 
-import style from './Round.css.js';
+import style from './Round.css';
+
+const commonScoreStyle = {
+  position: 'fixed', color: 'red', fontWeight: 'bold', fontSize: 30,
+  backgroundColor: 'white',
+  borderRadius: '50%',
+  border: '3px solid red',
+  textAlign: 'center',
+  lineHeight: 1.5,
+  height: 45, width: 45,
+};
+
+const scoreStyles = [{
+  left: '4vw', top: '21vh',
+  ...commonScoreStyle,
+}, {
+  right: '4vw', bottom: '7vh',
+  ...commonScoreStyle,
+}, {
+  left: '4vw', top: '54vh',
+  ...commonScoreStyle,
+}, {
+  right: '4vw', top: '54vh',
+  ...commonScoreStyle,
+}];
+
+
 
 class Round extends Component {
   static get namespace(){
@@ -152,15 +178,16 @@ class Round extends Component {
       // just did the cut
       
       if ( nuCut.rank === 11 ) {
-        this.props.onScoringEvent({
-          player: cribOwner,
-          type: 'crib dibs',
-          pts: 2,
-        });        
+        if ( this.props.scores.get( cribOwner ) < 116 )
+          this.props.onScoringEvent({
+            player: cribOwner,
+            type: 'crib dibs',
+            pts: 2,
+          });
       }
 
       // put in the pegging round
-      this.props.setPhase('peg');
+//      this.props.setPhase('peg');
       this.Pegging =
         this.props.getDevice( Pegging, ['peg'], Pegging.initState.merge({
           hands: this.props.subState.get('hands'),
@@ -223,7 +250,9 @@ class Round extends Component {
             .concat(this.props.subState.getIn( ['hands', 0] ).toJS())
             .concat(this.props.subState.getIn( ['hands', 1] ).toJS())
       );
-      this.props.setPhase('peg');
+      this.props.setPhase('post-select');
+
+      setTimeout(()=> this.props.setPhase('pre-peg'), 320);
     }
   }
 
@@ -233,63 +262,81 @@ class Round extends Component {
   }
   
   render() {
-    const showCut = (this.props.subState.get('crib').size === 4);
-    const cutYet = this.props.subState.getIn(['cut', 'rank']);
+    const phase = this.props.subState.get('phase');
+
+    const showCut = (this.props.subState.get('crib').size === 4) ;
+    const cut = this.props.subState.get('cut');
+    const cutYet = !! cut.get('rank');
     
     const showSend = (this.props.subState.get('crib').size !== 4);
 
-    const showPegging = this.props.subState.get('phase') === 'peg';
-    const showHands = this.props.subState.get('phase') === 'post-score';
+    const showPegging = phase.indexOf('peg') > -1;
+    const showRound = phase !== 'peg';
+    
+    const showHands = phase === 'post-score';
 
     const PeggingDevice = this.Pegging;
 
     const cribCut = (this.props.subState.getIn(['cut', 'rank']) !== 11) ?
                     ({ suit: this.props.subState.getIn(['cut', 'suit']) }) : {};
+
+    const cpHand = this.props.subState.getIn( ['hands', 0] );
+    const p1Hand = this.props.subState.getIn( ['hands', 1] );
+
+    const andCut = ( phase === 'post-score' ) ?
+                   fromJS( [{}, cut] ) : fromJS([]);
+    
     return (
       <div style={style.container}>
         
         {
-          showPegging ? (
-            <PeggingDevice
-                onScoringEvent={this.props.onScoringEvent}
-                onComplete={() => this.props.setPhase('score')} />
-          ) : (
+        showPegging ? (
+        <PeggingDevice
+            onDidMount={()=> this.props.setPhase('peg')}
+            onScoringEvent={this.props.onScoringEvent}
+            onComplete={() => this.props.setPhase('score')} />
+          ) : null
+        }
+        {
+          showRound ? (
             <div>
-              <Hand cards={this.props.subState.getIn( ['hands', 0] )}
+              <Hand cards={ cpHand.concat( andCut ) }
                     hidden={ !showHands }
                     onClick={() => 0}/>
 
               {
                 showSend ?
                 (<button className="Round--send-to-crib"
-                         style={style.cut}
+                         style={style.cutButton}
                          onClick={this.sendToCrib}>
-                  Send cards to
-                  {[' computer\'s ', ' my '][
+                  Send to
+                  {[' CP ', ' my '][
                      this.props.subState.get('cribOwner')
                    ]}
                   crib
                 </button>) : null
               }
-              <Hand cards={this.props.subState.get('crib')}
+              <Hand cards={this.props.subState.get('crib').concat( andCut )}
+                    onClick={()=>0}
                     hidden={ !showHands } />
               
-              <Hand cards={this.props.subState.getIn( ['hands', 1] )}
+              <Hand cards={ p1Hand.concat( andCut ) }
+                    hidden={false}
                     onClick={ci => this.props.selectCard(1, ci)}/>
             </div>
-          )
+          ) : null
           
         }
 
         {
           showCut && !cutYet ? (
-            <button style={style.cut} onClick={this.cut}>cut</button>
+            <button style={style.cutButton} onClick={this.cut}>Cut</button>
           ) : null
         }
 
 
         {
-          cutYet? (
+          ( ( phase === 'post-select' ) || ( phase === 'pre-peg' ) ) ? (
             <div style={style.cut}>
               <Hand cards={[this.props.subState.get('cut')]}/>
             </div>
@@ -300,27 +347,21 @@ class Round extends Component {
           !showHands ? null :
           (
             <div>
-              <p>
-                Computer's hand:
+              <div style={scoreStyles[0]}>
                 {
                   score( this.props.subState.getIn( ['hands', 0] ).toJS(),
                          this.props.subState.get('cut').toJS() )
                 }
-                pts
-              </p>
-              <p>
-                My hand:
+              </div>
+              
+              <div style={scoreStyles[1]}>
                 {
                   score( this.props.subState.getIn( ['hands', 1] ).toJS(),
                          this.props.subState.get('cut').toJS() )
                 }
-                pts
-              </p>
-              <p>
-                {
-                  ['Computer\'s ', 'my '][this.props.subState.get('cribOwner')]
-                }
-                Crib:
+              </div>
+              
+              <div style={scoreStyles[2+this.props.subState.get('cribOwner')]}>
                 {
                   score(
                     this.props.subState.get( 'crib' ).toJS().concat(
@@ -328,15 +369,24 @@ class Round extends Component {
                     cribCut
                   )
                 }
-                pts
-              </p>
-              <button className="Round--next-hand"
-                      onClick={this.nextHand}>Deal</button>
+              </div>
+
+              {
+                this.props.winner > -1 ? (
+                  <button style={style.cutButton} onClick={this.props.nuGame}>
+                    {['CP', 'You'][this.props.winner]} won!<br/>New Game
+                  </button>
+                ) : (
+                  <button className="Round--next-hand"
+                          style={style.cutButton}
+                          onClick={this.nextHand}>Deal</button>
+                )
+              }
             </div>
           )
         }
       </div>
-          );
+    );
   }
 }
 

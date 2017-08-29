@@ -17,6 +17,8 @@ class Game extends Component {
         type: 'trackScoringEvent',
         payload: e,
       }),
+
+      nuGame: ()=>({ type: 'nuGame' }),
     };
   }
 
@@ -38,7 +40,11 @@ class Game extends Component {
           nuScores.getIn(['scores', 1]) > 120 ? nuScores.set('winner', 1) :
           nuScores
         )
-      },  
+      },
+
+      nuGame: state=> state.set('scoring', fromJS([]))
+                           .set('winner', -1)
+                           .set('scores', fromJS([0,0]))
 
     };
   }
@@ -70,6 +76,9 @@ class Game extends Component {
         }
         <div style={{position:'relative'}}>
           <CurrentHand onScoringEvent={this.props.trackScoringEvent}
+                       winner={this.props.subState.get('winner')}
+                       nuGame={this.props.nuGame}
+                       scores={this.props.subState.get('scores')}
                        scoring={this.props.subState.get('scoring')}/>
         </div>
 

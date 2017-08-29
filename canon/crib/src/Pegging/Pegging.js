@@ -91,12 +91,18 @@ class Pegging extends Component {
     });
   }
 
+  componentDidMount(){
+    setTimeout(()=>
+      this.props.onDidMount(), 900);
+  }
+  
   componentWillMount(){
     if (this.props.subState.get('nextToPlay') === 0)
-      this.props.cpPegFromHand(
-        this.props.subState.getIn( ['hands', 0] ).toJS(),
-        this.props.subState.get('played').toJS()
-      );
+      setTimeout(()=>
+        this.props.cpPegFromHand(
+          this.props.subState.getIn( ['hands', 0] ).toJS(),
+          this.props.subState.get('played').toJS()
+        ), 900);
   }
   
   componentWillReceiveProps(nuProps){
@@ -125,7 +131,7 @@ class Pegging extends Component {
       if( count !== 31 )
         this.props.onScoringEvent({ player, type: 'peg-end', pts: 1 });
 
-      this.props.onComplete();
+      setTimeout(()=> this.props.onComplete(), 800);
       
 
       // have to pass
@@ -148,18 +154,48 @@ class Pegging extends Component {
   
   render() {
     const { count, stack } = pegScore( this.props.subState.get('played').toJS() );
-    const stackCards = fromJS(stack);
+    const stackCards = fromJS(stack)
+      .filter( pl => !!pl.getIn(['card', 'rank']) );
+
+    const minStackCards = stackCards
+      .map( pl => pl.get('card') )
+      .concat( fromJS(
+        Array( Math.max(0, 6 - stackCards.size) ).fill({})
+      ) );
+
+    const cpHand = this.props.subState.getIn( ['hands', 0] )
+    const cpHandFill = cpHand.concat( fromJS(
+      Array( 4 - cpHand.size ).fill({})
+    ) );
+
+    const p1Hand = this.props.subState.getIn( ['hands', 1] )
+    const p1HandFill = p1Hand.concat( fromJS(
+      Array( 4 - p1Hand.size ).fill({})
+    ) );
     
     return (
-      <div className="Pegging">
-        <Hand cards={this.props.subState.getIn( ['hands', 0] )}
+      <div className="Pegging" style={{
+        position: 'fixed', top: 40, left: 0, bottom: 0, right: 0
+      }}>
+        <Hand cards={cpHandFill}
               hidden={true}
               onClick={() => 0}/>
 
-        { count }
-        <Hand cards={stackCards.map( pl => pl.get('card') )} />
+        <div style={{
+          position: 'fixed', left: 5, top: '54vh',
+          height: 45, width: 45, fontSize: 30, fontWeight: 'bold',
+          textAlign: 'center', lineHeight: 1.5, color: 'darkgreen',
+          border: '3px solid darkgreen', backgroundColor: 'white',
+          borderRadius: '50%',
+        }}>
+          { count }
+        </div>
+
+        <div style={{ paddingLeft: 'calc( 1vw - 100px )' }}>
+          <Hand cards={minStackCards}/>
+        </div>
         
-        <Hand cards={this.props.subState.getIn( ['hands', 1] )}
+        <Hand cards={p1HandFill}
               onClick={ci => this.props.playCard(ci)}/>
         
       </div>
