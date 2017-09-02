@@ -12,7 +12,8 @@ import style from './Round.css';
 
 const commonScoreStyle = {
   position: 'fixed', color: 'red', fontWeight: 'bold', fontSize: 30,
-  backgroundColor: 'white',
+  backgroundColor: '#eee',
+  boxShadow: '5px 4px #333',
   borderRadius: '50%',
   border: '3px solid red',
   textAlign: 'center',
