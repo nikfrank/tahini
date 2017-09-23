@@ -65,10 +65,76 @@ export default ({ rank, suit, fill, xOffset, yOffset, onClick }) => (
   </g>
 );
 
+
+const path = ({ x1, y1, xc1, yc1, xc2, yc2, x2, y2 })=>
+  `M ${x1} ${y1} C ${xc1} ${yc1}, ${xc2} ${yc2}, ${x2} ${y2}`;
+
+const isntOffCorner = (cx, cy, r)=>
+  ((cx >= 20) && (cx <= 150)) ||
+  ((cy >= 20) && (cy <= 138)) ? true : (
+
+    Math.pow(
+      Math.pow( 65 - Math.abs( 85 - cx ), 2) +
+      Math.pow( 59 - Math.abs( 79 - cy ), 2), 0.5
+    ) + r < 20
+  );
+
+const r256 = ()=> Math.floor(Math.random()*256);
+const seedColors = [
+  `rgb(${r256()}, ${r256()}, ${r256()})`,
+  `rgb(${r256()}, ${r256()}, ${r256()})`,
+  `rgb(${r256()}, ${r256()}, ${r256()})`,
+];
+console.log(seedColors);
+let circles = [];
+
+Array(50).fill(1).forEach((o, oi, arr)=> {
+  const r = Math.abs( Math.random()*30 -12 );
+  const op = Math.random()*0.5 + 0.375;
+  
+  let cx, cy;
+  let tries = 20;
+  
+  do {
+    cx = r +2 + Math.random()*(170 - 2*r - 4);
+    cy = r +2 + Math.random()*(158 - 2*r - 4);
+    
+  } while (
+    (--tries) && (
+      !isntOffCorner(cx, cy, r+3) ||
+      circles.filter(p => (
+        Math.pow(p.cx-cx, 2) + Math.pow(p.cy-cy, 2)) < Math.pow(p.r + r + 4, 2)).length
+    )
+  );
+
+  if(tries) circles.push({ cx, cy, r, op });
+});
+
+
+
 export const CardBack = ({ xOffset }) => (
-  <use xlinkHref={'svg-cards.svg#back'} x={xOffset} y="20" />
+  <g transform={`translate(${xOffset}, 0)`}>
+    <rect width={170} height={158}
+          x={0} y={0}
+          rx={20} ry={20}
+          fill={seedColors[2]}
+          stroke="black"/>
+    {
+      circles.map(({ cx, cy, r, op }, ki)=> (
+        <circle key={ki} r={r}
+                cx={cx} cy={cy}
+                fill={seedColors[0]}
+                stroke={seedColors[1]}
+                opacity={op}
+                strokeWidth={2}/>
+      ) )
+    }
+  </g>
 );
 
+
+
+//  <use xlinkHref={'svg-cards.svg#back'} x={xOffset} y="20" />
 
 const dep =  ({ rank, suit, fill, xOffset, yOffset, onClick }) => (
 
