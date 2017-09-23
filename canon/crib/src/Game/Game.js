@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import Round from '../Round/';
 import Scoreboard from '../pure/Scoreboard';
 
-import score from '../util/score';
+import score from '../scoring/score';
 
 class Game extends Component {
   static get namespace(){
@@ -27,6 +27,13 @@ class Game extends Component {
       // if one player has >120, set game to HEwon, don't change score further
       
       trackScoringEvent: (subState, { payload: e }) => {
+
+        // prevent deuplicate counting of hands
+        const prev = subState.getIn(['scoring', subState.get('scoring').size-1, 'type']);
+        if(( prev === 'crib' ) && (['crib dibs', 'peg'].indexOf(e.type) === -1))
+          return subState;
+
+        
         const nuScores = subState
           .update('scoring', sc => sc.push(fromJS(e)) )
           .updateIn(['scores', e.player], sc => sc + e.pts);

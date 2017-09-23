@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import Hand from '../pure/Hand';
 import Card from '../pure/Card';
 
-import pegScore from '../util/pegScore';
+import pegScore from '../scoring/pegScore';
 
 class Pegging extends Component {
   static get namespace(){
@@ -93,7 +93,7 @@ class Pegging extends Component {
 
   componentDidMount(){
     setTimeout(()=>
-      this.props.onDidMount(), 900);
+      this.props.onDidMount(), this.props.timeout);
   }
   
   componentWillMount(){
@@ -102,7 +102,7 @@ class Pegging extends Component {
         this.props.cpPegFromHand(
           this.props.subState.getIn( ['hands', 0] ).toJS(),
           this.props.subState.get('played').toJS()
-        ), 900);
+        ), this.props.timeout);
   }
   
   componentWillReceiveProps(nuProps){
@@ -131,7 +131,7 @@ class Pegging extends Component {
       if( count !== 31 )
         this.props.onScoringEvent({ player, type: 'peg-end', pts: 1 });
 
-      setTimeout(()=> this.props.onComplete(), 800);
+      setTimeout(()=> this.props.onComplete(), this.props.timeout);
       
 
       // have to pass
@@ -148,7 +148,7 @@ class Pegging extends Component {
         this.props.cpPegFromHand(
           nuProps.subState.getIn(['hands', 0]).toJS(),
           nuProps.subState.get('played').toJS()
-        ), 500);
+        ), this.props.timeout/2);
   }
 
   

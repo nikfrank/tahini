@@ -1,4 +1,4 @@
-import pegScore, { runPtsPerStack } from '../../util/pegScore';
+import pegScore, { runPtsPerStack } from '../../scoring/pegScore';
 
 const noRun = (stack)=>{
   for( let i=1; i<14; i++ )

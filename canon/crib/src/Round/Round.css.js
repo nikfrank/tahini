@@ -17,7 +17,8 @@ export default {
     borderWidth: '5px',
 
     fontSize: '3.5vh',
-    backgroundColor: '#5ff',    
+    backgroundColor: '#5ff',
+    userSelect: 'none',
   },
 
   container: {

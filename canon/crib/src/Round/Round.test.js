@@ -180,7 +180,7 @@ it('deals a hand when mounted', ()=>{
       cards => cards.at(1).simulate('click')
     ) ).then(toJS)
     .then( state => {
-      expect( state.phase ).toEqual('peg');
+      expect( state.phase ).toEqual('post-select');
     })
 
   

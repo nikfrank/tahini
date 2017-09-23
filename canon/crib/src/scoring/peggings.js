@@ -228,6 +228,25 @@ export default [
     name: 'go',
   },
 
+  {
+    played: [
+      { card: { rank: 2, suit: 1 }, player: 1},
+      { card: { rank: 1, suit: 1 }, player: 0},
+      { card: { rank: 3, suit: 1 }, player: 1},
+      { card: {}, player: 0},
+    ],
+    stack: [
+      { card: { rank: 2, suit: 1 }, player: 1},
+      { card: { rank: 1, suit: 1 }, player: 0},
+      { card: { rank: 3, suit: 1 }, player: 1},
+      { card: {}, player: 0},
+    ],
+    score: 0,
+    player: 0,
+    count: 6,
+    name: 'no false runs',
+  },
+
 ];
 
 // cases:

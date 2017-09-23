@@ -1,4 +1,4 @@
-import score from '../../util/score';
+import score from '../../scoring/score';
 
 class cpChooseCribCards {
   constructor(next){

@@ -40,16 +40,14 @@ const suitFills = [
 
 
 export default ({ rank, suit, fill, xOffset, yOffset, onClick }) => (
-  <g transform={`translate(${xOffset}, ${yOffset})`}>
+  <g transform={`translate(${xOffset}, ${yOffset})`} onClick={onClick}>
     <rect width={170} height={158}
-          onClick={onClick}
           x={0} y={0}
           rx={20} ry={20}
           fill={suitFills[suit]}
           stroke="black"/>
 
-    <text onClick={onClick}
-          fontWeight="bold"
+    <text fontWeight="bold"
           transform={'translate(7, 40) '+ (
               (rank!==10) ? '' : 'scale(0.5, 1)' )}
           fontFamily="monospace"
@@ -85,7 +83,7 @@ const seedColors = [
   `rgb(${r256()}, ${r256()}, ${r256()})`,
   `rgb(${r256()}, ${r256()}, ${r256()})`,
 ];
-console.log(seedColors);
+
 let circles = [];
 
 Array(50).fill(1).forEach((o, oi, arr)=> {

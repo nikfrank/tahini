@@ -6,7 +6,7 @@ import Card from '../pure/Card';
 
 import Pegging from '../Pegging';
 
-import score from '../util/score';
+import score from '../scoring/score';
 
 import style from './Round.css';
 
@@ -292,10 +292,11 @@ class Round extends Component {
         
         {
         showPegging ? (
-        <PeggingDevice
-            onDidMount={()=> this.props.setPhase('peg')}
-            onScoringEvent={this.props.onScoringEvent}
-            onComplete={() => this.props.setPhase('score')} />
+            <PeggingDevice
+                timeout={900}
+                onDidMount={()=> this.props.setPhase('peg')}
+                onScoringEvent={this.props.onScoringEvent}
+                onComplete={() => this.props.setPhase('score')} />
           ) : null
         }
         {
@@ -331,7 +332,9 @@ class Round extends Component {
 
         {
           showCut && !cutYet ? (
-            <button style={style.cutButton} onClick={this.cut}>Cut</button>
+            <button style={style.cutButton}
+                    className="cut-button"
+                    onClick={this.cut}>Cut</button>
           ) : null
         }
 

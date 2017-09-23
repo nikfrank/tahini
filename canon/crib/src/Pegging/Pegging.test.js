@@ -15,11 +15,13 @@ import {
 } from 'tahini';
 
 
+const wait = n=> (new Promise(s=> setTimeout(s, n)));
+
 import Pegging from './Pegging';
 import Card from '../pure/Card';
 
 import networkHandlers from '../network/';
-import pegScore from '../util/pegScore';
+import pegScore from '../scoring/pegScore';
 
 const { it, expect } = global;
 
@@ -141,8 +143,9 @@ it('plays cp crib hand', () => {
      ), Promise.resolve()
     
   ).then( rejectify(()=>{
-    expect( complete.mock.calls ).toHaveLength(1);
+    // expect( complete.mock.calls ).toHaveLength(1); // on a timeout
     expect( scoring.mock.calls ).toHaveLength(1); // peg end
+    expect( scoring.mock.calls[0][0].type ).toEqual('peg-end'); // peg end
   }))
 });
 
@@ -165,12 +168,12 @@ it('plays my crib hand', () => {
   const scoring = jest.fn();
   
   const p = mount(
-    <PeggingD onComplete={complete} onScoringEvent={scoring}/>
+    <PeggingD timeout={0} onComplete={complete} onScoringEvent={scoring}/>
   );
 
   return [1, 2, 3, 4].reduce((s, c)=>
     s.then(()=> p.find(Card))
-    
+
      .then(getNextState(
        appStore,
        cards => cards.last().simulate('click')
@@ -182,12 +185,13 @@ it('plays my crib hand', () => {
        expect( state.hands[1] ).toHaveLength(4 - c); 
      })
      ).then( c < 4 ? getNextState(appStore) : ()=>0
-     ), Promise.resolve()
+     ), Promise.resolve().then(getNextState(appStore))
     
   ).then( rejectify(()=>{
     
-    expect( complete.mock.calls ).toHaveLength(1);
+    // expect( complete.mock.calls ).toHaveLength(1); // on timeout
     expect( scoring.mock.calls ).toHaveLength(1);
+    expect( scoring.mock.calls[0][0].type ).toEqual('peg-end');
     
   }))
 });
@@ -360,25 +364,25 @@ it('disallows stack tipping', () => {
   const scoring = jest.fn();
   
   const p = mount(
-    <PeggingD onComplete={complete} onScoringEvent={scoring}/>
+    <PeggingD timeout={0} onComplete={complete} onScoringEvent={scoring}/>
   );
 
 
   // here play cards, assert illegal play is blocked.  
   return Promise
     .resolve()
+    .then(getNextState(appStore)).then(toJS)
+    .then( rejectify( state => {
+      expect( state.played ).toHaveLength( 1 );
+      expect( state.hands[0] ).toHaveLength( 3 );
+      expect( state.hands[1] ).toHaveLength( 4 );
+    }) )
 
     .then(()=> p.find(Card))
     .then(getNextState(
       appStore,
       cards => cards.at(1).simulate('click')
-    )).then(toJS)
-    .then( rejectify( state => {
-      expect( state.played ).toHaveLength( 2 );
-      expect( state.hands[0] ).toHaveLength( 3 );
-      expect( state.hands[1] ).toHaveLength( 3 );
-    }) )
-
+    ))
     .then(getNextState(appStore)).then(toJS)
     .then( rejectify( state => {
       expect( pegScore(state.played).count ).toEqual( 30 );
@@ -391,7 +395,7 @@ it('disallows stack tipping', () => {
     .then(()=> p.find(Card))
     .then(getNextState(
       appStore,
-      cards => cards.at(3).simulate('click')
+      cards => cards.at(3).simulate('click') // to red the test -> put 5, it plays the ace
     )).then(toJS)
     .then( rejectify( state => {
 

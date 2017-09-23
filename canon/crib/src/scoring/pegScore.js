@@ -4,7 +4,8 @@ export const runPtsPerStack = stack => {
               .slice(-i)
               .map( c => 1*c.card.rank )
               .sort((a, b) => (a - b))
-              .reduce( (p, c, i, a) => ( p && ( (!i) || ( c - a[i-1] === 1)) ), true) && stack.filter(c => c.card.rank).length > 2 )
+              .reduce( (p, c, i, a) => ( p && ( (!i) || ( c - a[i-1] === 1)) ), true) &&
+         stack.filter(c => c.card.rank).length > 2 )
       return stack.filter(c => c.card.rank).slice(-i).length;
   
   return 0;
