@@ -1,8 +1,6 @@
 export default {
-  maxHeight:'35vh',
-  minHeight:'35vh',
-
-  marginTop: -20,
+  maxHeight:'34vh',
+  minHeight:'34vh',
   
   maxWidth:'100vw',
   padding: 0,

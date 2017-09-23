@@ -110,8 +110,8 @@ Array(50).fill(1).forEach((o, oi, arr)=> {
 
 
 
-export const CardBack = ({ xOffset }) => (
-  <g transform={`translate(${xOffset}, 0)`}>
+export const CardBack = ({ xOffset, yOffset }) => (
+  <g transform={`translate(${xOffset}, ${yOffset})`}>
     <rect width={170} height={158}
           x={0} y={0}
           rx={20} ry={20}

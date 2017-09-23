@@ -12,7 +12,7 @@ export default ({ cards=[], onClick, hidden, style={} }) => (
         !card.get('rank') ? null : (
 
           hidden ? (
-            <CardBack key={i} xOffset={i*100} yOffset={0} />
+            <CardBack key={i} xOffset={i*100} yOffset={20} />
           ) : (
             <Card key={card.get('rank')+''+card.get('suit')}
                   onClick={()=> onClick(i)}
