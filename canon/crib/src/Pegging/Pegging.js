@@ -44,9 +44,15 @@ class Pegging extends Component {
 
           // passing
           ci === null
-        ) ? subState.update('played', pl =>
-          pl.push( fromJS({ card: {}, player: hi }))
-        ).set('nextToPlay', (hi + 1)%2) : (
+        ) ? (
+          subState.getIn(['played', -1])
+                  .equals( fromJS({ card: {}, player: hi })) ? subState : (
+                    
+                    subState.update('played', pl =>
+                      pl.push( fromJS({ card: {}, player: hi }))
+                    ).set('nextToPlay', (hi + 1)%2)
+                  )
+        ) : (
           
           // block stack tipping
           subState.getIn( ['hands', hi] ).map( card => {
@@ -110,19 +116,17 @@ class Pegging extends Component {
     const played = nuProps.subState.get('played');
     const prevPlayed = this.props.subState.get('played');
 
-    if ( ( played === prevPlayed ) || ( !played.size ) )
-      if ( ( nuProps.subState.getIn(['hands', 1]).size === 0 ) &&
-           ( nuProps.subState.getIn(['hands', 0]).size > 0 ) ) {
-        return this.props.playCard( null );
-      } else return;
+    if( played === prevPlayed ) return;
+      
+    if ( !played.size ) return;
+
 
     const { score, player, count, stack } = pegScore( played.toJS() );
-
-    // if there are no cards in nextToPlay's hand send {}
-    const passes = stack.reduce( (p, c) => (c.card.rank? 0 : p+1) , 0);
     
     if ( score )
       this.props.onScoringEvent({ player, type: 'peg', pts: score });
+
+    const passes = stack.reduce( (p, c) => (c.card.rank? 0 : p+1) , 0);
     
     // if all the cards are played, onComplete
     if ( nuProps.subState.getIn(['hands', 0]).size +
@@ -130,6 +134,9 @@ class Pegging extends Component {
 
       if( count !== 31 )
         this.props.onScoringEvent({ player, type: 'peg-end', pts: 1 });
+      else
+        this.props.onScoringEvent({ player, type: 'peg-end', pts: 0 });
+      // already took 31 for 2. want to be consistent here.
 
       setTimeout(()=> this.props.onComplete(), this.props.timeout);
       
