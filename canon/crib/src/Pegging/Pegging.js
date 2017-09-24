@@ -45,13 +45,17 @@ class Pegging extends Component {
           // passing
           ci === null
         ) ? (
-          subState.getIn(['played', -1])
-                  .equals( fromJS({ card: {}, player: hi })) ? subState : (
-                    
-                    subState.update('played', pl =>
-                      pl.push( fromJS({ card: {}, player: hi }))
-                    ).set('nextToPlay', (hi + 1)%2)
-                  )
+          subState
+            .getIn(['played', -1])
+            .equals( fromJS({ card: {}, player: hi })) ? subState : (
+              
+              subState.update('played', pl =>
+                pl.push( fromJS({ card: {}, player: hi }))
+              ).set('nextToPlay',
+                    subState.getIn(['hands', (hi + 1)%2]).size ?
+                    (hi + 1)%2 : (hi + 2)%2
+              )
+            )
         ) : (
           
           // block stack tipping
@@ -116,17 +120,21 @@ class Pegging extends Component {
     const played = nuProps.subState.get('played');
     const prevPlayed = this.props.subState.get('played');
 
-    if( played === prevPlayed ) return;
-      
-    if ( !played.size ) return;
 
 
     const { score, player, count, stack } = pegScore( played.toJS() );
+
+    const passes = stack.reduce( (p, c) => (c.card.rank? 0 : p+1) , 0);
+
+
+    if( played === prevPlayed )
+      return;
+    
+    if ( !played.size ) return;
     
     if ( score )
       this.props.onScoringEvent({ player, type: 'peg', pts: score });
 
-    const passes = stack.reduce( (p, c) => (c.card.rank? 0 : p+1) , 0);
     
     // if all the cards are played, onComplete
     if ( nuProps.subState.getIn(['hands', 0]).size +

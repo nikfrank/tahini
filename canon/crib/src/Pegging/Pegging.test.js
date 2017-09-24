@@ -404,3 +404,10 @@ it('disallows stack tipping', () => {
 
     }) )  
 });
+
+
+// test where
+// p, c, p, p || c, p, c || c
+
+// the third round sticks because p1 is expected to play, but cant
+// bug is fixed but untested (see null section in playcard hand.size? nextP : sameP
