@@ -253,7 +253,7 @@ class Round extends Component {
       );
       this.props.setPhase('post-select');
 
-      setTimeout(()=> this.props.setPhase('pre-peg'), 320);
+      setTimeout(()=> this.props.setPhase('pre-peg'), 120);
     }
   }
 

@@ -110,7 +110,7 @@ class Pegging extends Component {
 
   componentDidMount(){
     setTimeout(()=>
-      this.props.onDidMount(), this.props.timeout);
+      this.props.onDidMount(), this.props.timeout/2);
   }
   
   componentWillMount(){
