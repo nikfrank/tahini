@@ -135,7 +135,7 @@ it('plays cp crib hand', () => {
 
      .then(getNextState(appStore)).then(toJS)
      .then( rejectify( state => {
-       expect( state.played ).toHaveLength(2 * c);
+       expect( state.played ).toHaveLength( (2 * c) + 1*(c===4));
        expect( state.hands[0] ).toHaveLength(4 - c);
        expect( state.hands[1] ).toHaveLength(4 - c);
        

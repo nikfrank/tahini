@@ -53,7 +53,14 @@ class Pegging extends Component {
                 pl.push( fromJS({ card: {}, player: hi }))
               ).set('nextToPlay',
                     subState.getIn(['hands', (hi + 1)%2]).size ?
-                    (hi + 1)%2 : (hi + 2)%2
+                    (hi + 1)%2 : (
+
+                      subState
+                        .getIn(['played', -1])
+                        .equals( fromJS({ card: {}, player: (hi+1)%2 })) ? (
+                          (hi + 2)%2 ) : ( (hi + 1)%2
+                        )
+                    )
               )
             )
         ) : (
@@ -127,46 +134,42 @@ class Pegging extends Component {
     const passes = stack.reduce( (p, c) => (c.card.rank? 0 : p+1) , 0);
 
 
-    if( played === prevPlayed )
-      return;
+    // if nextToPlay is 0 trigger computer play
+    if( ( nuProps.subState.get('nextToPlay') === 0 ) && !this.cpPlaytimeout)
+      this.cpPlaytimeout = setTimeout(() =>
+        (this.cpPlaytimeout = false) || (
+          this.props.cpPegFromHand(
+            nuProps.subState.getIn(['hands', 0]).toJS(),
+            nuProps.subState.get('played').toJS()
+          )), this.props.timeout/2 );
+
+    // have to pass
+    else if (( nuProps.subState.get('nextToPlay') === 1 ) &&
+             ( passes < 2 ) &&
+             ( !nuProps.subState.getIn(['hands', 1])
+                       .filter( c => (
+                         Math.min(10, c.get('rank')) + count <= 31 ) ).size ))
+      this.props.playCard(null);
+    
+    if( played === prevPlayed ) return;
     
     if ( !played.size ) return;
     
     if ( score )
       this.props.onScoringEvent({ player, type: 'peg', pts: score });
-
-    
     // if all the cards are played, onComplete
-    if ( nuProps.subState.getIn(['hands', 0]).size +
-         nuProps.subState.getIn(['hands', 1]).size === 0) {
+    if ( ( nuProps.subState.getIn(['hands', 0]).size +
+           nuProps.subState.getIn(['hands', 1]).size === 0) &&
+         (!this.completeTimeout)){
 
-      if( count !== 31 )
-        this.props.onScoringEvent({ player, type: 'peg-end', pts: 1 });
-      else
-        this.props.onScoringEvent({ player, type: 'peg-end', pts: 0 });
-      // already took 31 for 2. want to be consistent here.
+      this.props.onScoringEvent({ player, type: 'peg-end', pts: 0 });
 
-      setTimeout(()=> this.props.onComplete(), this.props.timeout);
-      
-
-      // have to pass
-    } else if (( nuProps.subState.get('nextToPlay') === 1 ) &&
-               ( passes < 2 ) &&
-               ( !nuProps.subState.getIn(['hands', 1])
-                         .filter( c => (
-                           Math.min(10, c.get('rank')) + count <= 31 ) ).size ))
-      this.props.playCard(null);
+      this.completeTimeout = setTimeout(()=> this.props.onComplete(), this.props.timeout);
+    }
     
-    // if nextToPlay is 0 trigger computer play
-    else if ( nuProps.subState.get('nextToPlay') === 0 )
-      setTimeout(() =>
-        this.props.cpPegFromHand(
-          nuProps.subState.getIn(['hands', 0]).toJS(),
-          nuProps.subState.get('played').toJS()
-        ), this.props.timeout/2);
   }
 
-  
+
   render() {
     const { count, stack } = pegScore( this.props.subState.get('played').toJS() );
     const stackCards = fromJS(stack)

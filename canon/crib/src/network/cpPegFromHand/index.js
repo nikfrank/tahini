@@ -41,8 +41,10 @@ class cpPegFromHand {
       return this.done();
       
     } else if(maxScore < 0){
-      this.next({ payload: [0, null] });
-      return this.done();
+      if( !onPass ) {
+        this.next({ payload: [0, null] });
+        return this.done();
+      }
     }
     
     const counts = poss.map( p => p.count );
