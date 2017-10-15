@@ -7,10 +7,10 @@ const seStyle = {
   zIndex: 10,
 };
 
-const trackWidth = 2;
+const trackWidth = 5;
 
 const divColor = ({ pts, player })=> ([0,1,2].map( pp=>
-  Math.min( 255, player !== pp ? 0 : (100 + pts * 6) )
+  Math.min( 255, (player + pp -1 <= 0) ? 0 : (100 + pts * 6) )
 ) );
 
 const divPerSE = ({ pts, total, player, color=divColor({pts, player}) }) => {
@@ -38,11 +38,11 @@ const divPerSE = ({ pts, total, player, color=divColor({pts, player}) }) => {
     
     return {
       [edgeDim]: player * trackWidth,
-      [runDim]: `calc( ${player*trackWidth}px + ${(total % 30) / 0.3}v${thickDim[0]} )`,
+      [runDim]: `${(total % 30) / 0.3}v${thickDim[0]}`,
       [thinDim]: trackWidth,
-      [thickDim]: `calc( ${pts / 0.3}v${thickDim[0]} - ${2*player*trackWidth + 2}px )`,
+      [thickDim]: `${pts / 0.3}v${thickDim[0]}`,
 
-      border: '1px solid white',
+      border: `1px dashed rgb(${color[0]}, ${color[1]}, ${color[2]}, 0.375)`,
       backgroundColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`
     };
   }
