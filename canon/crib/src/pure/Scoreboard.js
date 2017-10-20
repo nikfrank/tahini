@@ -1,6 +1,33 @@
 import React from 'react';
 import { fromJS } from 'immutable';
 
+const legendStyle = {
+  zIndex: 30,
+  position: 'fixed',
+  top: '4vh',
+  right: '4vw',
+  width: 200,
+  maxWidth: '15vw',
+  maxHeight: '15vh',
+  color: 'white',
+  textShadow: '-1px -1px 0 #000, '+
+              '1px -1px 0 #000, '+
+              '-1px 1px 0 #000, '+
+              '1px 1px 0 #000',
+  fontWeight: 900,
+  fontSize: '3vh',
+  letterSpacing: -0.5,
+  backgroundColor: 'rgba(127,127,127,0.25)',
+  borderRadius: 20,
+  padding: 10,
+  userSelect: 'none',
+};
+
+const legendRowStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+};
+
 const seStyle = {
   position: 'fixed',
   color: 'red',
@@ -85,16 +112,27 @@ export default ({ scoring }) => {
           <div key={'1'+sei} style={{ ...seStyle, ...se }}/>
         ) )
       }
-      <p style={{ textAlign: 'center' }}>
-        {
-          lastScorePlayer ? (
-            <span>
-              my pts: {myPts} cp pts: {cpPts}
-              {('  ' + lastScorePlayer +' + '+lastScore.get('pts'))}
-            </span>
-          ): null
-        }
-      </p>
+          {
+            lastScorePlayer ? (
+              <div style={legendStyle}>
+                <div style={legendRowStyle}>
+                  <span>me</span><span>{myPts}</span>
+                </div>
+                <div style={legendRowStyle}>
+                  <span>cp</span><span>{cpPts}</span>
+                </div>
+                <div style={legendRowStyle}>
+                  <span>
+                    {'' + lastScorePlayer }
+                  </span>
+                  <span>{' + '}</span>
+                  <span>
+                    {lastScore.get('pts')}
+                  </span>
+                </div>
+              </div>
+            ): null
+          }
     </div>
   );
 };
