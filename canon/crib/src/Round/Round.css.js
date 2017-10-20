@@ -1,7 +1,7 @@
 export default {
   cut: {
     position:'fixed',
-    bottom:'48vh',
+    bottom:'55vh',
     left:'25vw',
     width:'50vw',
     height:'10vh',

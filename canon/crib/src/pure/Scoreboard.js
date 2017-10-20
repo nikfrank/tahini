@@ -6,7 +6,7 @@ const legendStyle = {
   position: 'fixed',
   top: '4vh',
   right: '4vw',
-  width: 200,
+  width: 100,
   maxWidth: '15vw',
   maxHeight: '15vh',
   color: 'white',
