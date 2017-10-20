@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 
-import Hand from '../pure/Hand';
-import Card from '../pure/Card';
+import { Hand } from '../pure/';
 
 import pegScore from '../scoring/pegScore';
 
@@ -200,7 +199,7 @@ class Pegging extends Component {
               onClick={() => 0}/>
 
         <div style={{
-          position: 'fixed', left: 5, top: '54vh',
+          position: 'fixed', left: 5, top: '63vh',
           height: 45, width: 45, fontSize: 30, fontWeight: 'bold',
           textAlign: 'center', lineHeight: 1.5, color: 'darkgreen',
           border: '3px solid darkgreen', backgroundColor: 'white',

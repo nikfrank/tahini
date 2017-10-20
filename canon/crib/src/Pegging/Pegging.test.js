@@ -18,7 +18,7 @@ import {
 const wait = n=> (new Promise(s=> setTimeout(s, n)));
 
 import Pegging from './Pegging';
-import Card from '../pure/Card';
+import { Card } from '../pure/';
 
 import networkHandlers from '../network/';
 import pegScore from '../scoring/pegScore';

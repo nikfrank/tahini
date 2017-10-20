@@ -47,8 +47,6 @@ class cpPegFromHand {
       }
     }
     
-    const counts = poss.map( p => p.count );
-    
     // > 21 no run possible (highest)
     const highSafe = poss.map( p => ( (p.count > 21) && noRun(p.stack) ) );
     if ( highSafe.filter(h => h).length ) {

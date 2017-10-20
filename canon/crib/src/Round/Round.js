@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 
-import Hand from '../pure/Hand';
-import Card from '../pure/Card';
+import { Hand } from '../pure/';
 
 import Pegging from '../Pegging';
 
@@ -22,13 +21,13 @@ const commonScoreStyle = {
 };
 
 const scoreStyles = [{
-  left: '4vw', top: '21vh',
+  left: '4vw', top: '25vh',
   ...commonScoreStyle,
 }, {
   right: '4vw', bottom: '7vh',
   ...commonScoreStyle,
 }, {
-  left: '4vw', top: '54vh',
+  left: '4vw', top: '63vh',
   ...commonScoreStyle,
 }, {
   right: '4vw', top: '54vh',
@@ -215,6 +214,12 @@ class Round extends Component {
       });
 
 
+      // here, the crib is considered to be a five card hand
+      // which makes computing the score of crib flushes easier
+      
+      // so to compute the good jack (for which it doesn't behave that way)
+      // we pass in a blank suited card if the cut isn't a jack
+      // this will dole the good jack point when appropriate
       const cribCut = (nuCut.rank !== 11) ?
                       { suit: nuCut.suit } : {};
 
@@ -228,6 +233,7 @@ class Round extends Component {
   }
   
   sendToCrib = ()=>{
+    // player cards are taken if selected
     this.props.sendToCrib(1);
 
     const cpHand = this.props.subState.getIn( ['hands', 0] );
@@ -342,7 +348,7 @@ class Round extends Component {
         {
           ( ( phase === 'post-select' ) || ( phase === 'pre-peg' ) ) ? (
             <div style={style.cut}>
-              <Hand cards={[this.props.subState.get('cut')]}/>
+              <Hand cards={fromJS([this.props.subState.get('cut')])}/>
             </div>
           ) : null
         }

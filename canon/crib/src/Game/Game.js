@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 
 import Round from '../Round/';
-import Scoreboard from '../pure/Scoreboard';
-
-import score from '../scoring/score';
+import { Scoreboard } from '../pure/';
 
 class Game extends Component {
   static get namespace(){

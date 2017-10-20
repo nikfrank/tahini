@@ -7,3 +7,7 @@ body {
 svg * {
   user-select: none;
 }
+
+button:focus {
+  outline: none;
+}

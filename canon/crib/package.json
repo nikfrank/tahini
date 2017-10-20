@@ -5,6 +5,7 @@
     "enzyme": "^2.8.2",
     "react": "^15.5.3",
     "react-addons-test-utils": "^15.5.1",
+    "react-deck-o-cards": "^1.0.3",
     "react-dom": "^15.5.3",
     "react-redux": "^5.0.4",
     "tahini": "^1.3.2"

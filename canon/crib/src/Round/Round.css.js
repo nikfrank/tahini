@@ -15,14 +15,19 @@ export default {
     width:'50vw',
     height:'10vh',
     borderWidth: '5px',
-
+    color: 'white',
+    textShadow: '-1px -1px 0 #000, '+
+                '1px -1px 0 #000, '+
+                '-1px 1px 0 #000, '+
+                '1px 1px 0 #000',
+    fontWeight: 900,
     fontSize: '3.5vh',
-    backgroundColor: '#5ff',
+    backgroundColor: 'rgba(0,0,0,0)',
     userSelect: 'none',
   },
 
   container: {
-    backgroundColor:'#119933',
+    backgroundColor:'#0c6c24',
     position: 'fixed',
     top: 40,
     left: 0,
